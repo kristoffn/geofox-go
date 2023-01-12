@@ -6,6 +6,14 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+func TestNew(t *testing.T) {
+	api := New("testuser", "testpassword", "testauth")
+	assert.NotNil(t, api)
+	assert.Equal(t, "testuser", api.Username)
+	assert.Equal(t, "testpassword", api.Password)
+	assert.Equal(t, "testauth", api.AuthType)
+}
+
 func TestCreateSignature(t *testing.T) {
 	cases := []struct {
 		name              string

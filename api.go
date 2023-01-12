@@ -21,12 +21,12 @@ type API struct {
 	AuthType string
 }
 
-func New(username, password, authType string) (*API, error) {
+func New(username, password, authType string) *API {
 	return &API{
 		Username: username,
 		Password: password,
 		AuthType: authType,
-	}, nil
+	}
 }
 
 func createSHA1HmacSignature(input []byte, key []byte) string {
