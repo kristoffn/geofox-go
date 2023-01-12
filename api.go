@@ -29,9 +29,8 @@ func New(username, password, authType string) (*API, error) {
 	}, nil
 }
 
-func createSignature(input []byte, key string) string {
-	keyBytes := []byte(key)
-	h := hmac.New(sha1.New, keyBytes)
+func createSHA1HmacSignature(input []byte, key []byte) string {
+	h := hmac.New(sha1.New, key)
 	h.Write(input)
 	return base64.StdEncoding.EncodeToString(h.Sum(nil))
 }
@@ -60,7 +59,7 @@ func (a *API) makeRequest(method, url string, payload *strings.Reader) ([]byte, 
 	}
 
 	req.Header.Add("Accept", "application/json")
-	req.Header.Add("geofox-auth-signature", createSignature(bodyBytes, a.Password))
+	req.Header.Add("geofox-auth-signature", createSHA1HmacSignature(bodyBytes, []byte(a.Password)))
 	req.Header.Add("geofox-auth-user", a.Username)
 	req.Header.Add("geofox-auth-type", a.AuthType)
 	req.Header.Add("Content-Type", "application/json")
