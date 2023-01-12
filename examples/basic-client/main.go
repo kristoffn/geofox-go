@@ -1,7 +1,6 @@
 package main
 
 import (
-	"bytes"
 	"fmt"
 	"os"
 
@@ -11,14 +10,11 @@ import (
 func main() {
 	username := os.Getenv("GEOFOX_USER")
 	password := os.Getenv("GEOFOX_PASSWD")
-	client, err := geofox.New(username, password, geofox.AuthTypeHmacSHA1)
+	client := geofox.New(username, password, geofox.AuthTypeHmacSHA1)
+
+	initResponse, err := client.Init()
 	if err != nil {
 		panic(err)
 	}
-	responseBytes, err := client.Init()
-	if err != nil {
-		panic(err)
-	}
-	response := bytes.NewBuffer(responseBytes).String()
-	fmt.Println(response)
+	fmt.Printf("%+v", initResponse)
 }
