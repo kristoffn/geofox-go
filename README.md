@@ -1,4 +1,5 @@
 # geofox-go
+[![Go Report Card](https://goreportcard.com/badge/github.com/kristoffn/geofox-go)](https://goreportcard.com/report/github.com/kristoffn/geofox-go)
 ## About
 
 geofox-go is a golang client for the Geofox Thin Interface (GTI) to access public transport information about Hamburg, Germany.
