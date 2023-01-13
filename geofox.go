@@ -19,14 +19,30 @@ type API struct {
 	Username string
 	Password string
 	AuthType string
+	Debug    bool
 }
 
-func New(username, password, authType string) *API {
-	return &API{
-		Username: username,
-		Password: password,
-		AuthType: authType,
+func New(username, password string, opts ...Option) (*API, error) {
+	api, err := newClient(opts...)
+	if err != nil {
+		return nil, err
 	}
+
+	api.Username = username
+	api.Password = password
+
+	return api, nil
+}
+
+func newClient(opts ...Option) (*API, error) {
+	api := &API{
+		AuthType: AuthTypeHmacSHA1,
+		Debug:    false,
+	}
+	if err := api.parseOptions(opts...); err != nil {
+		return nil, fmt.Errorf("failed to parse options: %w", err)
+	}
+	return api, nil
 }
 
 func createSHA1HmacSignature(input []byte, key []byte) string {

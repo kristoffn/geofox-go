@@ -7,11 +7,13 @@ import (
 )
 
 func TestNew(t *testing.T) {
-	api := New("testuser", "testpassword", "testauth")
+	api, err := New("testuser", "testpassword")
+	assert.Nil(t, err)
 	assert.NotNil(t, api)
 	assert.Equal(t, "testuser", api.Username)
 	assert.Equal(t, "testpassword", api.Password)
-	assert.Equal(t, "testauth", api.AuthType)
+	assert.Equal(t, AuthTypeHmacSHA1, api.AuthType)
+	assert.Equal(t, false, api.Debug)
 }
 
 func TestCreateSignature(t *testing.T) {
