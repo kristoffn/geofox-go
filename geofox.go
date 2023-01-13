@@ -6,7 +6,7 @@ import (
 	"crypto/sha1"
 	"encoding/base64"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"strings"
 )
@@ -52,11 +52,11 @@ func createSHA1HmacSignature(input []byte, key []byte) string {
 }
 
 func getBodyBytes(req *http.Request) ([]byte, error) {
-	body, err := ioutil.ReadAll(req.Body)
+	body, err := io.ReadAll(req.Body)
 	if err != nil {
 		return nil, fmt.Errorf("error reading body: %v", err)
 	}
-	req.Body = ioutil.NopCloser(bytes.NewBuffer(body))
+	req.Body = io.NopCloser(bytes.NewBuffer(body))
 
 	return body, nil
 }
@@ -87,7 +87,7 @@ func (a *API) makeRequest(method, url string, payload *strings.Reader) ([]byte, 
 	}
 	defer res.Body.Close()
 
-	body, err := ioutil.ReadAll(res.Body)
+	body, err := io.ReadAll(res.Body)
 	if err != nil {
 		return nil, err
 	}
