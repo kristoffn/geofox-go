@@ -8,3 +8,6 @@ geofox-go is a golang client for the Geofox Thin Interface (GTI) to access publi
 ```
 go get -u github.com/kristoffn/geofox-go
 ```
+
+## Note
+:exclamation::construction: This library is still in a very experimental state and subject to potential breaking changes. Use at your own discretion.:construction::exclamation:
