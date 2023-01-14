@@ -11,7 +11,7 @@ const (
 )
 
 type Coordniate struct {
-	X    float64
-	Y    float64
-	Type CoordinateType
+	X    float64        `json:"x"`
+	Y    float64        `json:"y"`
+	Type CoordinateType `json:"type"`
 }
