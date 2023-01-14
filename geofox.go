@@ -7,7 +7,9 @@ import (
 	"encoding/base64"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
+	"net/http/httputil"
 	"strings"
 )
 
@@ -80,12 +82,29 @@ func (a *API) makeRequest(method, url string, payload *strings.Reader) ([]byte, 
 	req.Header.Add("geofox-auth-type", a.AuthType)
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept-Encoding", "gzip, deflate")
+	req.Header.Add("X-Platform", "web")
+
+	if a.Debug {
+		dump, err := httputil.DumpRequestOut(req, true)
+		if err != nil {
+			return nil, err
+		}
+		log.Println(string(dump))
+	}
 
 	res, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
 	defer res.Body.Close()
+
+	if a.Debug {
+		dump, err := httputil.DumpResponse(res, true)
+		if err != nil {
+			return nil, err
+		}
+		log.Println(string(dump))
+	}
 
 	body, err := io.ReadAll(res.Body)
 	if err != nil {
