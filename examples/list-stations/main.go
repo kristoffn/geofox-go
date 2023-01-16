@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/kristoffn/geofox-go"
@@ -10,18 +9,15 @@ import (
 func main() {
 	username := os.Getenv("GEOFOX_USER")
 	password := os.Getenv("GEOFOX_PASSWD")
-	client, err := geofox.New(username, password)
+	client, err := geofox.New(username, password, geofox.Debug())
 	if err != nil {
 		panic(err)
 	}
 
-	stations, err := client.ListStations(
+	_, err = client.ListStations(
 		[]geofox.ModificationType{geofox.ModificationTypeMain},
-		geofox.CoordinateTypeEPSG4326)
+		geofox.CoordinateTypeEPSG31467)
 	if err != nil {
 		panic(err)
-	}
-	for k, v := range stations {
-		fmt.Printf("%s -> %s\n", k, v.Name)
 	}
 }

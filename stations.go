@@ -43,13 +43,15 @@ type StationListEntry struct {
 
 type Station StationListEntry
 
-func (a *API) ListStations(modTypes []ModificationType, coordType CoordinateType) (map[string]Station, error) {
+func (a *API) ListStations(modTypes []ModificationType, coordType CoordinateType) (*LSResponse, error) {
 	uri := fmt.Sprintf("%s://%s%s/listStations", defaultScheme, defaultHostname, defaultBasePath)
 
 	req := LSRequest{
 		Language:          "de",
 		ModificationTypes: modTypes,
 		Version:           51,
+		CoordinateType:    coordType,
+		FilterEquivalent:  true,
 	}
 	reqBytes, err := json.Marshal(req)
 	if err != nil {
@@ -66,10 +68,5 @@ func (a *API) ListStations(modTypes []ModificationType, coordType CoordinateType
 	if err = json.Unmarshal(responseBytes, &resp); err != nil {
 		return nil, fmt.Errorf("failed to marshal body bytes: %s", err.Error())
 	}
-
-	stations := make(map[string]Station)
-	for _, station := range resp.Stations {
-		stations[station.ID] = Station(station)
-	}
-	return stations, nil
+	return &resp, nil
 }
