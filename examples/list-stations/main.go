@@ -15,17 +15,13 @@ func main() {
 		panic(err)
 	}
 
-	initResponse, err := client.Init()
-	if err != nil {
-		panic(err)
-	}
-
 	stations, err := client.ListStations(
-		initResponse.DataID,
-		[]geofox.ModificationType{geofox.ModificationTypePosition},
+		[]geofox.ModificationType{geofox.ModificationTypeMain},
 		geofox.CoordinateTypeEPSG4326)
 	if err != nil {
 		panic(err)
 	}
-	fmt.Printf("Stations: %v\n", stations)
+	for k, v := range stations {
+		fmt.Printf("%s -> %s\n", k, v.Name)
+	}
 }
