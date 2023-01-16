@@ -12,9 +12,9 @@ func (a *API) parseOptions(opts ...Option) error {
 	return nil
 }
 
-func Debug(debug bool) Option {
+func Debug() Option {
 	return func(a *API) error {
-		a.Debug = debug
+		a.Debug = true
 		return nil
 	}
 }
