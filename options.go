@@ -2,6 +2,13 @@ package geofox
 
 type Option func(*API) error
 
+func Debug() Option {
+	return func(a *API) error {
+		a.Debug = true
+		return nil
+	}
+}
+
 func (a *API) parseOptions(opts ...Option) error {
 	for _, option := range opts {
 		err := option(a)
@@ -10,11 +17,4 @@ func (a *API) parseOptions(opts ...Option) error {
 		}
 	}
 	return nil
-}
-
-func Debug() Option {
-	return func(a *API) error {
-		a.Debug = true
-		return nil
-	}
 }
