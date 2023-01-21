@@ -7,9 +7,9 @@ import (
 	"strings"
 )
 
-const (
-	initMessage = "{}"
-)
+type InitRequest struct {
+	BaseRequest
+}
 
 type InitResponse struct {
 	ReturnCode     string `json:"returnCode"`
@@ -24,7 +24,13 @@ type InitResponse struct {
 
 func (a *API) Init() (*InitResponse, error) {
 	uri := fmt.Sprintf("%s://%s%s/init", defaultScheme, defaultHostname, defaultBasePath)
-	payload := strings.NewReader(initMessage)
+
+	req := InitRequest{}
+	reqBytes, err := json.Marshal(req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal InitRequest object: %s", err.Error())
+	}
+	payload := strings.NewReader(string(reqBytes))
 
 	responseBytes, err := a.makeRequest(http.MethodPost, uri, payload)
 	if err != nil {

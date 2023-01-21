@@ -7,17 +7,8 @@ import (
 	"strings"
 )
 
-type LSFilterType string
-
-const (
-	LSNoFilter  LSFilterType = "NO_FILTER"
-	LSHVVLister LSFilterType = "HVV_LISTED"
-)
-
 type LSRequest struct {
-	Language          string             `json:"language,omitempty"`
-	Version           int                `json:"version,omitempty"`
-	FilterType        string             `json:"filterType,omitempty"`
+	BaseRequest
 	DataReleaseID     string             `json:"dataReleaseID"`
 	ModificationTypes []ModificationType `json:"modificationTypes"`
 	CoordinateType    CoordinateType     `json:"coordinateType,omitempty"`
@@ -41,18 +32,17 @@ type StationListEntry struct {
 	Exists       bool          `json:"exists"`
 }
 
-type Station StationListEntry
-
 func (a *API) ListStations(modTypes []ModificationType, coordType CoordinateType) (*LSResponse, error) {
 	uri := fmt.Sprintf("%s://%s%s/listStations", defaultScheme, defaultHostname, defaultBasePath)
 
 	req := LSRequest{
-		Language:          "de",
 		ModificationTypes: modTypes,
-		Version:           51,
 		CoordinateType:    coordType,
 		FilterEquivalent:  true,
 	}
+	req.Language = "de"
+	req.Version = 51
+
 	reqBytes, err := json.Marshal(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal LSRequest object: %s", err.Error())
