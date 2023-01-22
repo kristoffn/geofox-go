@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/kristoffn/geofox-go/coordinates"
 	"github.com/kristoffn/geofox-go/model"
 	"github.com/stretchr/testify/assert"
 )
@@ -52,4 +53,48 @@ func TestAPI_Init(t *testing.T) {
 }
 
 func TestAPI_ListStations(t *testing.T) {
+	// Happy path
+	setupTestServer()
+	testMux.HandleFunc("/listStations", func(w http.ResponseWriter, r *http.Request) {
+		response := model.LSResponse{
+			DataReleaseID: "test-data-release-id",
+			Stations: []model.StationListEntry{
+				{}, {}, {},
+			},
+		}
+		responseBytes, err := json.Marshal(response)
+		assert.Nil(t, err)
+		w.Write(responseBytes) //nolint
+	})
+	resp, err := testClient.ListStations(context.Background(),
+		[]model.ModificationType{model.ModificationTypeMain},
+		coordinates.EPSG4326)
+	assert.Nil(t, err)
+	assert.Equal(t, "test-data-release-id", resp.DataReleaseID)
+	assert.Equal(t, 3, len(resp.Stations))
+	teardownTestServer()
+
+	// Bad path - error 404
+	setupTestServer()
+	testMux.HandleFunc("/listStations", func(w http.ResponseWriter, r *http.Request) {
+		w.WriteHeader(http.StatusNotFound)
+	})
+	resp, err = testClient.ListStations(context.Background(),
+		[]model.ModificationType{model.ModificationTypeMain},
+		coordinates.EPSG4326)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "status code: 404")
+	teardownTestServer()
+
+	// Bad path - unmarshalable response
+	setupTestServer()
+	testMux.HandleFunc("/listStations", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte{'r', 'a', 'n', 'd', 'o', 'm'}) //nolint
+	})
+	resp, err = testClient.ListStations(context.Background(),
+		[]model.ModificationType{model.ModificationTypeMain},
+		coordinates.EPSG4326)
+	assert.Nil(t, resp)
+	assert.Contains(t, err.Error(), "failed to marshal body bytes")
+	teardownTestServer()
 }
