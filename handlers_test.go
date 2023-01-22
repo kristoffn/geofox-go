@@ -26,7 +26,7 @@ func TestAPI_Init(t *testing.T) {
 		}
 		responseBytes, err := json.Marshal(response)
 		assert.Nil(t, err)
-		w.Write(responseBytes)
+		w.Write(responseBytes) //nolint
 	})
 	resp, err := testClient.Init(context.Background()) //nolint
 	assert.Nil(t, err)
