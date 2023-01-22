@@ -5,7 +5,7 @@ import (
 	"os"
 
 	"github.com/kristoffn/geofox-go"
-	"github.com/kristoffn/geofox-go/geofox/coordinates"
+	"github.com/kristoffn/geofox-go/coordinates"
 )
 
 func main() {

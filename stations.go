@@ -7,7 +7,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/kristoffn/geofox-go/geofox/coordinates"
+	"github.com/kristoffn/geofox-go/coordinates"
 )
 
 type LSRequest struct {
