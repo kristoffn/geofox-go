@@ -27,6 +27,7 @@ type API struct {
 	Username    string
 	Password    string
 	AuthType    string
+	BaseURL     string
 	debug       bool
 	initialized bool
 }
@@ -39,6 +40,7 @@ func New(username, password string, opts ...Option) (*API, error) {
 
 	api.Username = username
 	api.Password = password
+	api.BaseURL = fmt.Sprintf("%s://%s%s", defaultScheme, defaultHostname, defaultBasePath)
 
 	return api, nil
 }
@@ -144,7 +146,7 @@ func (a *API) Init(ctx context.Context) (*model.InitResponse, error) {
 	}
 	payload := strings.NewReader(string(reqBytes))
 
-	responseBytes, err := a.makeRequest(ctx, http.MethodPost, endpointInit, payload)
+	responseBytes, err := a.makeRequest(ctx, http.MethodPost, a.BaseURL+"/init", payload)
 	if err != nil {
 		return nil, err
 	}
@@ -172,7 +174,7 @@ func (a *API) ListStations(ctx context.Context, modTypes []model.ModificationTyp
 	}
 	payload := strings.NewReader(string(reqBytes))
 
-	responseBytes, err := a.makeRequest(ctx, http.MethodPost, endpointListStations, payload)
+	responseBytes, err := a.makeRequest(ctx, http.MethodPost, a.BaseURL+"/listStations", payload)
 	if err != nil {
 		return nil, err
 	}
