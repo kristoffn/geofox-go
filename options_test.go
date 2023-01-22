@@ -24,8 +24,8 @@ func TestParseOptions(t *testing.T) {
 
 func TestOptionDebug(t *testing.T) {
 	api := API{}
-	assert.False(t, api.Debug)
+	assert.False(t, api.debug)
 	err := api.parseOptions(Debug())
 	assert.Nil(t, err)
-	assert.True(t, api.Debug)
+	assert.True(t, api.debug)
 }

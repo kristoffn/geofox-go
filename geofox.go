@@ -2,6 +2,7 @@ package geofox
 
 import (
 	"bytes"
+	"context"
 	"crypto/hmac"
 	"crypto/sha1"
 	"encoding/base64"
@@ -18,10 +19,11 @@ const (
 )
 
 type API struct {
-	Username string
-	Password string
-	AuthType string
-	Debug    bool
+	Username    string
+	Password    string
+	AuthType    string
+	debug       bool
+	initialized bool
 }
 
 func New(username, password string, opts ...Option) (*API, error) {
@@ -39,7 +41,7 @@ func New(username, password string, opts ...Option) (*API, error) {
 func newClient(opts ...Option) (*API, error) {
 	api := &API{
 		AuthType: AuthTypeHmacSHA1,
-		Debug:    false,
+		debug:    false,
 	}
 	if err := api.parseOptions(opts...); err != nil {
 		return nil, fmt.Errorf("failed to parse options: %w", err)
@@ -63,10 +65,10 @@ func getBodyBytes(req *http.Request) ([]byte, error) {
 	return body, nil
 }
 
-func (a *API) makeRequest(method, url string, payload *strings.Reader) ([]byte, error) {
+func (a *API) makeRequest(ctx context.Context, method, url string, payload *strings.Reader) ([]byte, error) {
 
 	client := &http.Client{}
-	req, err := http.NewRequest(method, url, payload)
+	req, err := http.NewRequestWithContext(ctx, method, url, payload)
 	if err != nil {
 		return nil, err
 	}
@@ -84,7 +86,7 @@ func (a *API) makeRequest(method, url string, payload *strings.Reader) ([]byte, 
 	req.Header.Add("Accept-Encoding", "gzip, deflate")
 	req.Header.Add("X-Platform", "web")
 
-	if a.Debug {
+	if a.debug {
 		dump, err := httputil.DumpRequestOut(req, true)
 		if err != nil {
 			return nil, err
@@ -98,7 +100,7 @@ func (a *API) makeRequest(method, url string, payload *strings.Reader) ([]byte, 
 	}
 	defer res.Body.Close()
 
-	if a.Debug {
+	if a.debug {
 		dump, err := httputil.DumpResponse(res, true)
 		if err != nil {
 			return nil, err

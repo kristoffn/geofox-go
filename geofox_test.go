@@ -13,7 +13,7 @@ func TestNew(t *testing.T) {
 	assert.Equal(t, "testuser", api.Username)
 	assert.Equal(t, "testpassword", api.Password)
 	assert.Equal(t, AuthTypeHmacSHA1, api.AuthType)
-	assert.Equal(t, false, api.Debug)
+	assert.Equal(t, false, api.debug)
 }
 
 func TestCreateSignature(t *testing.T) {

@@ -1,45 +1,34 @@
 package geofox
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
 	"strings"
+
+	"github.com/kristoffn/geofox-go/model"
 )
 
-type InitRequest struct {
-	BaseRequest
-}
-
-type InitResponse struct {
-	ReturnCode     string `json:"returnCode"`
-	BeginOfService string `json:"beginOfService"`
-	EndOfService   string `json:"endOfService"`
-	ID             string `json:"id"`
-	DataID         string `json:"dataId"`
-	BuildDate      string `json:"buildDate"`
-	BuildTime      string `json:"buildTime"`
-	BuildText      string `json:"buildText"`
-}
-
-func (a *API) Init() (*InitResponse, error) {
+func (a *API) Init(ctx context.Context) (*model.InitResponse, error) {
 	uri := fmt.Sprintf("%s://%s%s/init", defaultScheme, defaultHostname, defaultBasePath)
 
-	req := InitRequest{}
+	req := model.InitRequest{}
 	reqBytes, err := json.Marshal(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal InitRequest object: %s", err.Error())
 	}
 	payload := strings.NewReader(string(reqBytes))
 
-	responseBytes, err := a.makeRequest(http.MethodPost, uri, payload)
+	responseBytes, err := a.makeRequest(ctx, http.MethodPost, uri, payload)
 	if err != nil {
 		return nil, err
 	}
 
-	var resp InitResponse
+	var resp model.InitResponse
 	if err = json.Unmarshal(responseBytes, &resp); err != nil {
 		return nil, fmt.Errorf("failed to marshal body bytes: %s", err.Error())
 	}
+	a.initialized = true
 	return &resp, nil
 }
