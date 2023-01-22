@@ -19,7 +19,7 @@ func setupServer() {
 	mux = http.NewServeMux()
 	mockServer = httptest.NewServer(mux)
 
-	client, _ = New("testuser", "testpassword") //nolint
+	client, _ = New("testuser", "testpassword")
 	client.BaseURL = mockServer.URL
 }
 
@@ -65,7 +65,7 @@ func TestAPI_DefaultHeaders(t *testing.T) {
 			r.Header.Get("X-Platform"))
 
 	})
-	client.Init(context.Background())
+	client.Init(context.Background()) //nolint
 	teardownServer()
 }
 
