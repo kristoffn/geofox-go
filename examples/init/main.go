@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"os"
 
@@ -15,7 +16,7 @@ func main() {
 		panic(err)
 	}
 
-	initResponse, err := client.Init()
+	initResponse, err := client.Init(context.Background())
 	if err != nil {
 		panic(err)
 	}

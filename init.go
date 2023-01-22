@@ -1,6 +1,7 @@
 package geofox
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -22,7 +23,7 @@ type InitResponse struct {
 	BuildText      string `json:"buildText"`
 }
 
-func (a *API) Init() (*InitResponse, error) {
+func (a *API) Init(ctx context.Context) (*InitResponse, error) {
 	uri := fmt.Sprintf("%s://%s%s/init", defaultScheme, defaultHostname, defaultBasePath)
 
 	req := InitRequest{}
@@ -32,7 +33,7 @@ func (a *API) Init() (*InitResponse, error) {
 	}
 	payload := strings.NewReader(string(reqBytes))
 
-	responseBytes, err := a.makeRequest(http.MethodPost, uri, payload)
+	responseBytes, err := a.makeRequest(ctx, http.MethodPost, uri, payload)
 	if err != nil {
 		return nil, err
 	}

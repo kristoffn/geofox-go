@@ -1,6 +1,7 @@
 package geofox
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"net/http"
@@ -32,7 +33,7 @@ type StationListEntry struct {
 	Exists       bool          `json:"exists"`
 }
 
-func (a *API) ListStations(modTypes []ModificationType, coordType CoordinateType) (*LSResponse, error) {
+func (a *API) ListStations(ctx context.Context, modTypes []ModificationType, coordType CoordinateType) (*LSResponse, error) {
 	uri := fmt.Sprintf("%s://%s%s/listStations", defaultScheme, defaultHostname, defaultBasePath)
 
 	req := LSRequest{
@@ -49,7 +50,7 @@ func (a *API) ListStations(modTypes []ModificationType, coordType CoordinateType
 	}
 	payload := strings.NewReader(string(reqBytes))
 
-	responseBytes, err := a.makeRequest(http.MethodPost, uri, payload)
+	responseBytes, err := a.makeRequest(ctx, http.MethodPost, uri, payload)
 	if err != nil {
 		return nil, err
 	}
