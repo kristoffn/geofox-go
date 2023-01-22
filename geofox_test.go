@@ -19,7 +19,7 @@ func setupServer() {
 	mux = http.NewServeMux()
 	mockServer = httptest.NewServer(mux)
 
-	client, _ = New("testuser", "testpassword")
+	client, _ = New("testuser", "testpassword") //nolint
 	client.BaseURL = mockServer.URL
 }
 
