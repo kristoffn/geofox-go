@@ -1,4 +1,4 @@
-package geofox
+package model
 
 type Filter string
 
