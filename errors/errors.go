@@ -1,4 +1,4 @@
-package geofox
+package errors
 
 import (
 	"fmt"
@@ -13,69 +13,69 @@ const (
 	ErrorText          GeofoxErrorType = "ERROR_TEXT"
 )
 
-var _ error = (*Error)(nil)
+var _ error = (*GeofoxError)(nil)
 var _ error = (*RequestError)(nil)
 var _ error = (*AuthenticationError)(nil)
 var _ error = (*RateLimitError)(nil)
 var _ error = (*ServerError)(nil)
 var _ error = (*ServiceError)(nil)
 
-type Error struct {
+type GeofoxError struct {
 	StatusCode   int
 	ReturnCode   GeofoxErrorType
 	ErrorText    string
 	ErrorDevInfo string
 }
 
-func (e *Error) Error() string {
+func (e *GeofoxError) Error() string {
 	return fmt.Sprintf("status code: %d, error type: %s, message: %s, dev information: %s",
 		e.StatusCode, e.ReturnCode, e.ErrorText, e.ErrorDevInfo)
 }
 
 type RequestError struct {
-	geofoxError *Error
+	GeofoxError
 }
 
 func (e *RequestError) Error() string {
-	return e.geofoxError.Error()
+	return e.Error()
 }
 
 type AuthenticationError struct {
-	geofoxError *Error
+	GeofoxError
 }
 
 func (e *AuthenticationError) Error() string {
-	return e.geofoxError.Error()
+	return e.Error()
 }
 
 type AuthorizationError struct {
-	geofoxError *Error
+	GeofoxError
 }
 
 func (e *AuthorizationError) Error() string {
-	return e.geofoxError.Error()
+	return e.Error()
 }
 
 type RateLimitError struct {
-	geofoxError *Error
+	GeofoxError
 }
 
 func (e *RateLimitError) Error() string {
-	return e.geofoxError.Error()
+	return e.Error()
 }
 
 type ServerError struct {
-	geofoxError *Error
+	GeofoxError
 }
 
 func (e *ServerError) Error() string {
-	return e.geofoxError.Error()
+	return e.Error()
 }
 
 type ServiceError struct {
-	geofoxError *Error
+	GeofoxError
 }
 
 func (e *ServiceError) Error() string {
-	return e.geofoxError.Error()
+	return e.Error()
 }
