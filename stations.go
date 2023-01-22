@@ -40,7 +40,7 @@ func (a *API) ListStations(modTypes []ModificationType, coordType CoordinateType
 		CoordinateType:    coordType,
 		FilterEquivalent:  true,
 	}
-	req.Language = "de"
+	req.Language = LanguageGerman
 	req.Version = 51
 
 	reqBytes, err := json.Marshal(req)
