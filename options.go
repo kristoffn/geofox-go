@@ -4,7 +4,7 @@ type Option func(*API) error
 
 func Debug() Option {
 	return func(a *API) error {
-		a.Debug = true
+		a.debug = true
 		return nil
 	}
 }

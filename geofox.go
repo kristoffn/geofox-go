@@ -19,10 +19,11 @@ const (
 )
 
 type API struct {
-	Username string
-	Password string
-	AuthType string
-	Debug    bool
+	Username    string
+	Password    string
+	AuthType    string
+	debug       bool
+	initialized bool
 }
 
 func New(username, password string, opts ...Option) (*API, error) {
@@ -40,7 +41,7 @@ func New(username, password string, opts ...Option) (*API, error) {
 func newClient(opts ...Option) (*API, error) {
 	api := &API{
 		AuthType: AuthTypeHmacSHA1,
-		Debug:    false,
+		debug:    false,
 	}
 	if err := api.parseOptions(opts...); err != nil {
 		return nil, fmt.Errorf("failed to parse options: %w", err)
@@ -85,7 +86,7 @@ func (a *API) makeRequest(ctx context.Context, method, url string, payload *stri
 	req.Header.Add("Accept-Encoding", "gzip, deflate")
 	req.Header.Add("X-Platform", "web")
 
-	if a.Debug {
+	if a.debug {
 		dump, err := httputil.DumpRequestOut(req, true)
 		if err != nil {
 			return nil, err
@@ -99,7 +100,7 @@ func (a *API) makeRequest(ctx context.Context, method, url string, payload *stri
 	}
 	defer res.Body.Close()
 
-	if a.Debug {
+	if a.debug {
 		dump, err := httputil.DumpResponse(res, true)
 		if err != nil {
 			return nil, err

@@ -42,5 +42,6 @@ func (a *API) Init(ctx context.Context) (*InitResponse, error) {
 	if err = json.Unmarshal(responseBytes, &resp); err != nil {
 		return nil, fmt.Errorf("failed to marshal body bytes: %s", err.Error())
 	}
+	a.initialized = true
 	return &resp, nil
 }
