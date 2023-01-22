@@ -2,6 +2,7 @@ package geofox
 
 import (
 	"bytes"
+	"context"
 	"crypto/hmac"
 	"crypto/sha1"
 	"encoding/base64"
@@ -63,10 +64,10 @@ func getBodyBytes(req *http.Request) ([]byte, error) {
 	return body, nil
 }
 
-func (a *API) makeRequest(method, url string, payload *strings.Reader) ([]byte, error) {
+func (a *API) makeRequest(ctx context.Context, method, url string, payload *strings.Reader) ([]byte, error) {
 
 	client := &http.Client{}
-	req, err := http.NewRequest(method, url, payload)
+	req, err := http.NewRequestWithContext(ctx, method, url, payload)
 	if err != nil {
 		return nil, err
 	}
