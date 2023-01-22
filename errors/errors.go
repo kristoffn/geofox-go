@@ -13,69 +13,73 @@ const (
 	ErrorText          GeofoxErrorType = "ERROR_TEXT"
 )
 
-var _ error = (*GeofoxError)(nil)
-var _ error = (*RequestError)(nil)
-var _ error = (*AuthenticationError)(nil)
-var _ error = (*RateLimitError)(nil)
-var _ error = (*ServerError)(nil)
-var _ error = (*ServiceError)(nil)
+var _ GeofoxError = (*ErrorUnauthorized)(nil)
+var _ GeofoxError = (*ErrorForbidden)(nil)
+var _ GeofoxError = (*ErrorNotFound)(nil)
+var _ GeofoxError = (*ErrorTooManyRequests)(nil)
+var _ GeofoxError = (*ErrorInternalServerError)(nil)
+var _ GeofoxError = (*ErrorGeneric)(nil)
 
-type GeofoxError struct {
-	StatusCode   int
-	ReturnCode   GeofoxErrorType
-	ErrorText    string
-	ErrorDevInfo string
+type GeofoxError interface {
+	Error() string
 }
 
-func (e *GeofoxError) Error() string {
-	return fmt.Sprintf("status code: %d, error type: %s, message: %s, dev information: %s",
-		e.StatusCode, e.ReturnCode, e.ErrorText, e.ErrorDevInfo)
+type ErrorUnauthorized struct {
+	StatusCode int
+	ReturnCode GeofoxErrorType
 }
 
-type RequestError struct {
-	GeofoxError
+func (e *ErrorUnauthorized) Error() string {
+	return fmt.Sprintf("status code: %d, error type: %s",
+		e.StatusCode, e.ReturnCode)
 }
 
-func (e *RequestError) Error() string {
-	return e.Error()
+type ErrorForbidden struct {
+	StatusCode int
+	ReturnCode GeofoxErrorType
 }
 
-type AuthenticationError struct {
-	GeofoxError
+func (e *ErrorForbidden) Error() string {
+	return fmt.Sprintf("status code: %d, error type: %s",
+		e.StatusCode, e.ReturnCode)
 }
 
-func (e *AuthenticationError) Error() string {
-	return e.Error()
+type ErrorNotFound struct {
+	StatusCode int
+	ReturnCode GeofoxErrorType
 }
 
-type AuthorizationError struct {
-	GeofoxError
+func (e *ErrorNotFound) Error() string {
+	return fmt.Sprintf("status code: %d, error type: %s",
+		e.StatusCode, e.ReturnCode)
 }
 
-func (e *AuthorizationError) Error() string {
-	return e.Error()
+type ErrorTooManyRequests struct {
+	StatusCode int
+	ReturnCode GeofoxErrorType
 }
 
-type RateLimitError struct {
-	GeofoxError
+func (e *ErrorTooManyRequests) Error() string {
+	return fmt.Sprintf("status code: %d, error type: %s",
+		e.StatusCode, e.ReturnCode)
 }
 
-func (e *RateLimitError) Error() string {
-	return e.Error()
+type ErrorInternalServerError struct {
+	StatusCode int
+	ReturnCode GeofoxErrorType
 }
 
-type ServerError struct {
-	GeofoxError
+func (e *ErrorInternalServerError) Error() string {
+	return fmt.Sprintf("status code: %d, error type: %s",
+		e.StatusCode, e.ReturnCode)
 }
 
-func (e *ServerError) Error() string {
-	return e.Error()
+type ErrorGeneric struct {
+	StatusCode int
+	ReturnCode GeofoxErrorType
 }
 
-type ServiceError struct {
-	GeofoxError
-}
-
-func (e *ServiceError) Error() string {
-	return e.Error()
+func (e *ErrorGeneric) Error() string {
+	return fmt.Sprintf("status code: %d, error type: %s",
+		e.StatusCode, e.ReturnCode)
 }

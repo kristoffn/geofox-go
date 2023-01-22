@@ -15,6 +15,7 @@ import (
 	"strings"
 
 	"github.com/kristoffn/geofox-go/coordinates"
+	gerrors "github.com/kristoffn/geofox-go/errors"
 	"github.com/kristoffn/geofox-go/model"
 )
 
@@ -69,7 +70,7 @@ func getBodyBytes(req *http.Request) ([]byte, error) {
 	return body, nil
 }
 
-func (a *API) makeRequest(ctx context.Context, method, url string, payload *strings.Reader) ([]byte, error) {
+func (a *API) makeRequest(ctx context.Context, method, url string, payload *strings.Reader) ([]byte, gerrors.GeofoxError) {
 
 	client := &http.Client{}
 	req, err := http.NewRequestWithContext(ctx, method, url, payload)
@@ -98,21 +99,37 @@ func (a *API) makeRequest(ctx context.Context, method, url string, payload *stri
 		log.Println(string(dump))
 	}
 
-	res, err := client.Do(req)
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}
-	defer res.Body.Close()
+	defer resp.Body.Close()
 
 	if a.debug {
-		dump, err := httputil.DumpResponse(res, true)
+		dump, err := httputil.DumpResponse(resp, true)
 		if err != nil {
 			return nil, err
 		}
 		log.Println(string(dump))
 	}
-
-	body, err := io.ReadAll(res.Body)
+	// TODO: Extend error handling for every possible responses
+	if resp.StatusCode >= http.StatusBadRequest {
+		switch resp.StatusCode {
+		case http.StatusUnauthorized:
+			return nil, &gerrors.ErrorUnauthorized{StatusCode: resp.StatusCode}
+		case http.StatusForbidden:
+			return nil, &gerrors.ErrorForbidden{StatusCode: resp.StatusCode}
+		case http.StatusNotFound:
+			return nil, &gerrors.ErrorNotFound{StatusCode: resp.StatusCode}
+		case http.StatusTooManyRequests:
+			return nil, &gerrors.ErrorTooManyRequests{StatusCode: resp.StatusCode}
+		case http.StatusInternalServerError:
+			return nil, &gerrors.ErrorInternalServerError{StatusCode: resp.StatusCode}
+		default:
+			return nil, &gerrors.ErrorGeneric{StatusCode: resp.StatusCode}
+		}
+	}
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
