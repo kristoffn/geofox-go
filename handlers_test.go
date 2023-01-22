@@ -50,3 +50,6 @@ func TestAPI_Init(t *testing.T) {
 	assert.Contains(t, err.Error(), "status code: 404")
 	teardownTestServer()
 }
+
+func TestAPI_ListStations(t *testing.T) {
+}
