@@ -10,27 +10,27 @@ import (
 )
 
 var (
-	mux        *http.ServeMux
-	mockServer *httptest.Server
-	client     *API
+	testMux    *http.ServeMux
+	testServer *httptest.Server
+	testClient *API
 )
 
-func setupServer() {
-	mux = http.NewServeMux()
-	mockServer = httptest.NewServer(mux)
+func setupTestServer() {
+	testMux = http.NewServeMux()
+	testServer = httptest.NewServer(testMux)
 
-	client, _ = New("testuser", "testpassword")
-	client.BaseURL = mockServer.URL
+	testClient, _ = New("testuser", "testpassword")
+	testClient.BaseURL = testServer.URL
 }
 
-func teardownServer() {
-	mockServer.Close()
+func teardownTestServer() {
+	testServer.Close()
 }
 
 func TestAPI_DefaultHeaders(t *testing.T) {
 	// Default headers
-	setupServer()
-	mux.HandleFunc("/init", func(w http.ResponseWriter, r *http.Request) {
+	setupTestServer()
+	testMux.HandleFunc("/init", func(w http.ResponseWriter, r *http.Request) {
 
 		assert.Equal(t, http.MethodPost, r.Method,
 			"Expected method 'POST', got %s",
@@ -65,8 +65,8 @@ func TestAPI_DefaultHeaders(t *testing.T) {
 			r.Header.Get("X-Platform"))
 
 	})
-	client.Init(context.Background()) //nolint
-	teardownServer()
+	testClient.Init(context.Background()) //nolint
+	teardownTestServer()
 }
 
 func TestNew(t *testing.T) {
