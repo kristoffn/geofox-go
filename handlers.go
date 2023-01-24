@@ -19,7 +19,7 @@ func (a *API) Init(ctx context.Context) (*model.InitResponse, error) {
 	}
 	payload := strings.NewReader(string(reqBytes))
 
-	resp, err := a.sendRequest(ctx, http.MethodPost, a.BaseURL+"/init", payload)
+	resp, err := a.sendRequest(ctx, http.MethodPost, "/init", payload)
 	if err != nil {
 		return nil, err
 	}
@@ -47,7 +47,7 @@ func (a *API) ListStations(ctx context.Context, modTypes []model.ModificationTyp
 	}
 	payload := strings.NewReader(string(reqBytes))
 
-	resp, err := a.sendRequest(ctx, http.MethodPost, a.BaseURL+"/listStations", payload)
+	resp, err := a.sendRequest(ctx, http.MethodPost, "/listStations", payload)
 	if err != nil {
 		return nil, err
 	}
