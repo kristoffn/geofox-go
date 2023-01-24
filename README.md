@@ -38,6 +38,10 @@ func main() {
 }
 
 ```
+Example output:
+```go
+&{ReturnCode:OK BeginOfService:15.01.2023 EndOfService:10.12.2023 ID:1.0.733 DataID:33.93.02 BuildDate:18.01.2023 BuildTime:14:36:21 BuildText:Regelfahrplan 2022}
+```
 
 ## Note
 :exclamation: This library is still in a very experimental state and subject to potential breaking changes. Use at your own discretion.
