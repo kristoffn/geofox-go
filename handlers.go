@@ -19,17 +19,17 @@ func (a *API) Init(ctx context.Context) (*model.InitResponse, error) {
 	}
 	payload := strings.NewReader(string(reqBytes))
 
-	responseBytes, err := a.makeRequest(ctx, http.MethodPost, a.BaseURL+"/init", payload)
+	resp, err := a.sendRequest(ctx, http.MethodPost, a.BaseURL+"/init", payload)
 	if err != nil {
 		return nil, err
 	}
 
-	var resp model.InitResponse
-	if err = json.Unmarshal(responseBytes, &resp); err != nil {
+	var initResp model.InitResponse
+	if err = json.Unmarshal(resp.Body, &initResp); err != nil {
 		return nil, fmt.Errorf("failed to marshal body bytes: %s", err.Error())
 	}
 	a.initialized = true
-	return &resp, nil
+	return &initResp, nil
 }
 
 func (a *API) ListStations(ctx context.Context, modTypes []model.ModificationType, coordType coordinates.CoordinateType) (*model.LSResponse, error) {
@@ -47,14 +47,14 @@ func (a *API) ListStations(ctx context.Context, modTypes []model.ModificationTyp
 	}
 	payload := strings.NewReader(string(reqBytes))
 
-	responseBytes, err := a.makeRequest(ctx, http.MethodPost, a.BaseURL+"/listStations", payload)
+	resp, err := a.sendRequest(ctx, http.MethodPost, a.BaseURL+"/listStations", payload)
 	if err != nil {
 		return nil, err
 	}
 
-	var resp model.LSResponse
-	if err = json.Unmarshal(responseBytes, &resp); err != nil {
+	var lsResp model.LSResponse
+	if err = json.Unmarshal(resp.Body, &lsResp); err != nil {
 		return nil, fmt.Errorf("failed to marshal body bytes: %s", err.Error())
 	}
-	return &resp, nil
+	return &lsResp, nil
 }
