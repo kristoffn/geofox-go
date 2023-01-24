@@ -6,12 +6,12 @@ import (
 	"crypto/hmac"
 	"crypto/sha1"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"net/http/httputil"
-	"strings"
 
 	gerrors "github.com/kristoffn/geofox-go/errors"
 )
@@ -27,6 +27,12 @@ type API struct {
 	BaseURL     string
 	debug       bool
 	initialized bool
+}
+
+type APIResponse struct {
+	Body       []byte
+	StatusCode int
+	Headers    http.Header
 }
 
 func New(username, password string, opts ...Option) (*API, error) {
@@ -69,10 +75,61 @@ func getBodyBytes(req *http.Request) ([]byte, error) {
 	return body, nil
 }
 
-func (a *API) makeRequest(ctx context.Context, method, url string, payload *strings.Reader) ([]byte, gerrors.GeofoxError) {
+func (a *API) sendRequest(ctx context.Context, method, uri string, params any) (*APIResponse, error) {
 
+	var reqBody io.Reader
+	if params != nil {
+		if r, ok := params.(io.Reader); ok {
+			reqBody = r
+		} else if paramBytes, ok := params.([]byte); ok {
+			reqBody = bytes.NewReader(paramBytes)
+		} else {
+			var jsonBody []byte
+			jsonBody, err := json.Marshal(params)
+			if err != nil {
+				return nil, fmt.Errorf("error marshalling params to JSON: %w", err)
+			}
+			reqBody = bytes.NewReader(jsonBody)
+		}
+	}
+
+	resp, err := a.request(ctx, method, uri, reqBody)
+	if err != nil {
+		return nil, err
+	}
+	defer resp.Body.Close()
+
+	// TODO: Extend error handling for every possible responses
+	if resp.StatusCode >= http.StatusBadRequest {
+		switch resp.StatusCode {
+		case http.StatusUnauthorized:
+			return nil, &gerrors.ErrorUnauthorized{StatusCode: resp.StatusCode}
+		case http.StatusForbidden:
+			return nil, &gerrors.ErrorForbidden{StatusCode: resp.StatusCode}
+		case http.StatusNotFound:
+			return nil, &gerrors.ErrorNotFound{StatusCode: resp.StatusCode}
+		case http.StatusTooManyRequests:
+			return nil, &gerrors.ErrorTooManyRequests{StatusCode: resp.StatusCode}
+		case http.StatusInternalServerError:
+			return nil, &gerrors.ErrorInternalServerError{StatusCode: resp.StatusCode}
+		default:
+			return nil, &gerrors.ErrorGeneric{StatusCode: resp.StatusCode}
+		}
+	}
+	body, err := io.ReadAll(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+	return &APIResponse{
+		Body:       body,
+		StatusCode: resp.StatusCode,
+		Headers:    resp.Header,
+	}, nil
+}
+
+func (a *API) request(ctx context.Context, method, uri string, reqBody io.Reader) (*http.Response, error) {
 	client := &http.Client{}
-	req, err := http.NewRequestWithContext(ctx, method, url, payload)
+	req, err := http.NewRequestWithContext(ctx, method, a.BaseURL+uri, reqBody)
 	if err != nil {
 		return nil, err
 	}
@@ -102,7 +159,6 @@ func (a *API) makeRequest(ctx context.Context, method, url string, payload *stri
 	if err != nil {
 		return nil, err
 	}
-	defer resp.Body.Close()
 
 	if a.debug {
 		dump, err := httputil.DumpResponse(resp, true)
@@ -111,26 +167,6 @@ func (a *API) makeRequest(ctx context.Context, method, url string, payload *stri
 		}
 		log.Println(string(dump))
 	}
-	// TODO: Extend error handling for every possible responses
-	if resp.StatusCode >= http.StatusBadRequest {
-		switch resp.StatusCode {
-		case http.StatusUnauthorized:
-			return nil, &gerrors.ErrorUnauthorized{StatusCode: resp.StatusCode}
-		case http.StatusForbidden:
-			return nil, &gerrors.ErrorForbidden{StatusCode: resp.StatusCode}
-		case http.StatusNotFound:
-			return nil, &gerrors.ErrorNotFound{StatusCode: resp.StatusCode}
-		case http.StatusTooManyRequests:
-			return nil, &gerrors.ErrorTooManyRequests{StatusCode: resp.StatusCode}
-		case http.StatusInternalServerError:
-			return nil, &gerrors.ErrorInternalServerError{StatusCode: resp.StatusCode}
-		default:
-			return nil, &gerrors.ErrorGeneric{StatusCode: resp.StatusCode}
-		}
-	}
-	body, err := io.ReadAll(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-	return body, nil
+
+	return resp, nil
 }
