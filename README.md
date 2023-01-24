@@ -2,7 +2,7 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/kristoffn/geofox-go)](https://goreportcard.com/report/github.com/kristoffn/geofox-go)
 ## About
 
-geofox-go is a Goclient for the Geofox Thin Interface (GTI) to provide information about Hamburg's public transport system.
+geofox-go is a Go client for the Geofox Thin Interface (GTI) to provide information about Hamburg's public transport system.
 
 ## Install
 ```
