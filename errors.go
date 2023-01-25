@@ -4,13 +4,15 @@ import (
 	"fmt"
 )
 
-type GeofoxErrorType string
+type GeofoxReturnCode string
 
 const (
-	ErrorCNTooMany     GeofoxErrorType = "ERROR_CN_TOO_MANY"
-	ErrorCommunication GeofoxErrorType = "ERROR_COMM"
-	ErrorRoute         GeofoxErrorType = "ERROR_ROUTE"
-	ErrorText          GeofoxErrorType = "ERROR_TEXT"
+	RCOK                GeofoxReturnCode = "OK"
+	RCCNTooMany         GeofoxReturnCode = "ERROR_CN_TOO_MANY"
+	RCCommError         GeofoxReturnCode = "ERROR_COMM"
+	RCRouteError        GeofoxReturnCode = "ERROR_ROUTE"
+	RCErrorText         GeofoxReturnCode = "ERROR_TEXT"
+	RCStartDestTooClose GeofoxReturnCode = "START_DEST_TOO_CLOSE"
 )
 
 var _ GeofoxError = (*ErrorUnauthorized)(nil)
@@ -26,7 +28,7 @@ type GeofoxError interface {
 
 type ErrorUnauthorized struct {
 	StatusCode int
-	ReturnCode GeofoxErrorType
+	ReturnCode GeofoxReturnCode
 }
 
 func (e *ErrorUnauthorized) Error() string {
@@ -36,7 +38,7 @@ func (e *ErrorUnauthorized) Error() string {
 
 type ErrorForbidden struct {
 	StatusCode int
-	ReturnCode GeofoxErrorType
+	ReturnCode GeofoxReturnCode
 }
 
 func (e *ErrorForbidden) Error() string {
@@ -46,7 +48,7 @@ func (e *ErrorForbidden) Error() string {
 
 type ErrorNotFound struct {
 	StatusCode int
-	ReturnCode GeofoxErrorType
+	ReturnCode GeofoxReturnCode
 }
 
 func (e *ErrorNotFound) Error() string {
@@ -56,7 +58,7 @@ func (e *ErrorNotFound) Error() string {
 
 type ErrorTooManyRequests struct {
 	StatusCode int
-	ReturnCode GeofoxErrorType
+	ReturnCode GeofoxReturnCode
 }
 
 func (e *ErrorTooManyRequests) Error() string {
@@ -66,7 +68,7 @@ func (e *ErrorTooManyRequests) Error() string {
 
 type ErrorInternalServerError struct {
 	StatusCode int
-	ReturnCode GeofoxErrorType
+	ReturnCode GeofoxReturnCode
 }
 
 func (e *ErrorInternalServerError) Error() string {
@@ -76,7 +78,7 @@ func (e *ErrorInternalServerError) Error() string {
 
 type ErrorGeneric struct {
 	StatusCode int
-	ReturnCode GeofoxErrorType
+	ReturnCode GeofoxReturnCode
 }
 
 func (e *ErrorGeneric) Error() string {
