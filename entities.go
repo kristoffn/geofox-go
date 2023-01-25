@@ -51,3 +51,46 @@ type Coordniate struct {
 	Y    float64        `json:"y"`
 	Type CoordinateType `json:"type"`
 }
+
+type LLRequest struct {
+	BaseRequest
+	WithSublines      bool               `json:"withSublines"`
+	DataReleaseID     string             `json:"dataReleaseID"`
+	ModificationTypes []ModificationType `json:"modificationTypes"`
+}
+
+type LLResponse struct {
+	ReturnCode    GeofoxReturnCode `json:"returnCode"`
+	ErrorText     string           `json:"errorText"`
+	ErrorDevInfo  string           `json:"errorDevInfo"`
+	DataReleaseID string           `json:"dataReleaseID"`
+	Lines         []LineListEntry  `json:"lines"`
+}
+
+type LineListEntry struct {
+	ID               string             `json:"id"`
+	Name             string             `json:"name"`
+	CarrierNameShort string             `json:"carrierNameShort"`
+	CarrierNameLong  string             `json:"carrierNameLong"`
+	Sublines         []SublineListEntry `json:"sublines"`
+	Exists           bool               `json:"exists"`
+	Type             ServiceType        `json:"type"`
+}
+
+type SublineListEntry struct {
+	SublineNumber   string         `json:"sublineNumber"`
+	VehicleType     VehicleType    `json:"vehicleType"`
+	StationSequence []StationLight `json:"stationSequence"`
+}
+
+type ServiceType struct {
+	SimpleType SimpleType `json:"simpleType"`
+	ShortInfo  string     `json:"shortInfo"`
+	LongInfo   string     `json:"longInfo"`
+	Model      string     `json:"model"`
+}
+
+type StationLight struct {
+	ID   string `json:"id"`
+	Name string `json:"json"`
+}

@@ -46,6 +46,7 @@ const (
 	VTypeABahn        VehicleType = "A_BAHN"
 	VTypeRegionalbahn VehicleType = "R_BAHN"
 	VTypeFernbahn     VehicleType = "F_BAHN"
+	VTypeEILBus       VehicleType = "EILBUS"
 )
 
 type Filter string
@@ -53,4 +54,17 @@ type Filter string
 const (
 	NoFilter        Filter = "NO_FILTER"
 	FilterHVVListed Filter = "HVV_LISTED"
+)
+
+type SimpleType string
+
+const (
+	STBus                SimpleType = "BUS"
+	STTrain              SimpleType = "TRAIN"
+	STShip               SimpleType = "SHIP"
+	STFootpath           SimpleType = "FOOTPATH"
+	STBicycle            SimpleType = "BICYCLE"
+	STAirplane           SimpleType = "AIRPLANE"
+	STChange             SimpleType = "CHANGE"
+	STChangeSamePlatform SimpleType = "CHANGE_SAME_PLATFORM"
 )
