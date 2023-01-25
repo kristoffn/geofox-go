@@ -54,8 +54,11 @@ func (a *API) ListStations(ctx context.Context, modTypes []ModificationType, coo
 	return &lsResp, nil
 }
 
-func (a *API) ListLines(ctx context.Context) (*LLResponse, error) {
-	req := LLRequest{}
+func (a *API) ListLines(ctx context.Context, modTypes []ModificationType, withSublines bool) (*LLResponse, error) {
+	req := LLRequest{
+		ModificationTypes: modTypes,
+		WithSublines:      withSublines,
+	}
 
 	reqBytes, err := json.Marshal(req)
 	if err != nil {
