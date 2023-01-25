@@ -6,13 +6,10 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
-
-	"github.com/kristoffn/geofox-go/coordinates"
-	"github.com/kristoffn/geofox-go/model"
 )
 
-func (a *API) Init(ctx context.Context) (*model.InitResponse, error) {
-	req := model.InitRequest{}
+func (a *API) Init(ctx context.Context) (*InitResponse, error) {
+	req := InitRequest{}
 	reqBytes, err := json.Marshal(req)
 	if err != nil {
 		return nil, fmt.Errorf("failed to marshal InitRequest object: %s", err.Error())
@@ -24,7 +21,7 @@ func (a *API) Init(ctx context.Context) (*model.InitResponse, error) {
 		return nil, err
 	}
 
-	var initResp model.InitResponse
+	var initResp InitResponse
 	if err = json.Unmarshal(resp.Body, &initResp); err != nil {
 		return nil, fmt.Errorf("failed to marshal body bytes: %s", err.Error())
 	}
@@ -32,14 +29,12 @@ func (a *API) Init(ctx context.Context) (*model.InitResponse, error) {
 	return &initResp, nil
 }
 
-func (a *API) ListStations(ctx context.Context, modTypes []model.ModificationType, coordType coordinates.CoordinateType) (*model.LSResponse, error) {
-	req := model.LSRequest{
+func (a *API) ListStations(ctx context.Context, modTypes []ModificationType, coordType CoordinateType) (*LSResponse, error) {
+	req := LSRequest{
 		ModificationTypes: modTypes,
 		CoordinateType:    coordType,
 		FilterEquivalent:  true,
 	}
-	req.Language = model.LanguageGerman
-	req.Version = 51
 
 	reqBytes, err := json.Marshal(req)
 	if err != nil {
@@ -52,7 +47,7 @@ func (a *API) ListStations(ctx context.Context, modTypes []model.ModificationTyp
 		return nil, err
 	}
 
-	var lsResp model.LSResponse
+	var lsResp LSResponse
 	if err = json.Unmarshal(resp.Body, &lsResp); err != nil {
 		return nil, fmt.Errorf("failed to marshal body bytes: %s", err.Error())
 	}
