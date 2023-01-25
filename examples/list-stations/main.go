@@ -5,8 +5,6 @@ import (
 	"os"
 
 	"github.com/kristoffn/geofox-go"
-	"github.com/kristoffn/geofox-go/coordinates"
-	"github.com/kristoffn/geofox-go/model"
 )
 
 func main() {
@@ -19,8 +17,8 @@ func main() {
 
 	_, err = client.ListStations(
 		context.Background(),
-		[]model.ModificationType{model.ModificationTypeMain},
-		coordinates.EPSG31467)
+		[]geofox.ModificationType{geofox.ModTypeMain},
+		geofox.EPSG4326)
 	if err != nil {
 		panic(err)
 	}
