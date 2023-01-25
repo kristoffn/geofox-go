@@ -12,8 +12,6 @@ import (
 	"log"
 	"net/http"
 	"net/http/httputil"
-
-	gerrors "github.com/kristoffn/geofox-go/errors"
 )
 
 const (
@@ -103,17 +101,17 @@ func (a *API) sendRequest(ctx context.Context, method, uri string, params any) (
 	if resp.StatusCode >= http.StatusBadRequest {
 		switch resp.StatusCode {
 		case http.StatusUnauthorized:
-			return nil, &gerrors.ErrorUnauthorized{StatusCode: resp.StatusCode}
+			return nil, &ErrorUnauthorized{StatusCode: resp.StatusCode}
 		case http.StatusForbidden:
-			return nil, &gerrors.ErrorForbidden{StatusCode: resp.StatusCode}
+			return nil, &ErrorForbidden{StatusCode: resp.StatusCode}
 		case http.StatusNotFound:
-			return nil, &gerrors.ErrorNotFound{StatusCode: resp.StatusCode}
+			return nil, &ErrorNotFound{StatusCode: resp.StatusCode}
 		case http.StatusTooManyRequests:
-			return nil, &gerrors.ErrorTooManyRequests{StatusCode: resp.StatusCode}
+			return nil, &ErrorTooManyRequests{StatusCode: resp.StatusCode}
 		case http.StatusInternalServerError:
-			return nil, &gerrors.ErrorInternalServerError{StatusCode: resp.StatusCode}
+			return nil, &ErrorInternalServerError{StatusCode: resp.StatusCode}
 		default:
-			return nil, &gerrors.ErrorGeneric{StatusCode: resp.StatusCode}
+			return nil, &ErrorGeneric{StatusCode: resp.StatusCode}
 		}
 	}
 	body, err := io.ReadAll(resp.Body)
