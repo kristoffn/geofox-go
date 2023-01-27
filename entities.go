@@ -6,21 +6,28 @@ type BaseRequest struct {
 	FilterType Filter `json:"filterType,omitempty"`
 }
 
+type BaseResponse struct {
+	ReturnCode   GeofoxReturnCode `json:"returnCode,omitempty"`
+	ErrorText    string           `json:"errorText,omitempty"`
+	ErrorDevInfo string           `json:"errorDevInfo,omitempty"`
+}
+
 type InitRequest struct {
 	BaseRequest
 }
 
 type InitResponse struct {
-	ReturnCode     string `json:"returnCode"`
-	BeginOfService string `json:"beginOfService"`
-	EndOfService   string `json:"endOfService"`
-	ID             string `json:"id"`
-	DataID         string `json:"dataId"`
-	BuildDate      string `json:"buildDate"`
-	BuildTime      string `json:"buildTime"`
-	BuildText      string `json:"buildText"`
+	BaseResponse
+	BeginOfService string     `json:"beginOfService"`
+	EndOfService   string     `json:"endOfService"`
+	ID             string     `json:"id"`
+	DataID         string     `json:"dataId"`
+	BuildDate      string     `json:"buildDate"`
+	BuildTime      string     `json:"buildTime"`
+	BuildText      string     `json:"buildText"`
+	Version        string     `json:"version"`
+	Properties     []Property `json:"properties"`
 }
-
 type LSRequest struct {
 	BaseRequest
 	DataReleaseID     string             `json:"dataReleaseID"`
@@ -30,8 +37,90 @@ type LSRequest struct {
 }
 
 type LSResponse struct {
+	BaseResponse
 	DataReleaseID string             `json:"dataReleaseID,omitempty"`
 	Stations      []StationListEntry `json:"stations,omitempty"`
+}
+type LLRequest struct {
+	BaseRequest
+	WithSublines      bool               `json:"withSublines"`
+	DataReleaseID     string             `json:"dataReleaseID"`
+	ModificationTypes []ModificationType `json:"modificationTypes"`
+}
+
+type LLResponse struct {
+	BaseResponse
+	DataReleaseID string          `json:"dataReleaseID"`
+	Lines         []LineListEntry `json:"lines"`
+}
+
+type TariffRequest struct {
+	BaseRequest
+	ScheduleElements     []ScheduleElementLight `json:"scheduleElements"`
+	Departure            GTITime                `json:"departure"`
+	Arrival              GTITime                `json:"arrival"`
+	ReturnReduced        bool                   `json:"returnReduced"`
+	ReturnPartialTickets bool                   `json:"returnPartialTickets"`
+}
+
+type TariffResponse struct {
+	BaseResponse
+	TariffInfos []TariffInfo `json:"tariffInfos"`
+}
+
+type TariffInfo struct {
+	TariffName    string             `json:"tariffName"`
+	TariffRegions []TariffRegionInfo `json:"tariffRegions"`
+	RegionTexts   []string           `json:"regionTexts"`
+	ExtraFareType ExtraFareType      `json:"extraFareType"`
+	TicketInfos   []TicketInfo       `json:"ticketInfos"`
+	TicketRemarks string             `json:"ticketRemarks"`
+}
+
+type TariffRegionInfo struct {
+	RegionType   TariffRegionType   `json:"regionType"`
+	Alternatives []TariffRegionList `json:"alternatives"`
+}
+
+type TariffRegionList struct {
+	Regions []string `json:"regions"`
+}
+
+type TicketInfo struct {
+	TariffKindID          int32            `json:"tariffKindID"`
+	TariffKindLabel       string           `json:"tariffKindLabel"`
+	TariffLevelId         int32            `json:"tariffLevelID"`
+	TariffLevelLabel      string           `json:"tariffLevelLabel"`
+	TariffGroupID         int32            `json:"tariffGroupID"`
+	TariffGroupLabel      string           `json:"tariffGroupLabel"`
+	ViaPathID             int              `json:"viaPathId"`
+	BasePrice             float64          `json:"basePrice"`
+	ExtraFarePrice        float64          `json:"extraFarePrice"`
+	ReducedBasePrice      float64          `json:"reducedBasePrice"`
+	ReducedExtraFarePrice float64          `json:"reducedExtraFarePrice"`
+	Currency              string           `json:"currency"`
+	RegionType            TariffRegionType `json:"regionType"`
+	NotRecommended        bool             `json:"notRecommended"`
+	ShopLinkRegular       string           `json:"shopLinkRegular"`
+	ShopLinkExtraFare     string           `json:"shopLinkExtraFare"`
+	StartStationID        string           `json:"startStationId"`
+	EndStationID          string           `json:"endStationId"`
+}
+
+type GTITime struct {
+	Date string `json:"date"`
+	Time string `json:"time"`
+}
+
+type ScheduleElementLight struct {
+	DepartureStationID string `json:"departureStationId"`
+	ArrivalStationID   string `json:"arrivalStationId"`
+	LineID             string `json:"lineId"`
+}
+
+type Property struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
 }
 
 type StationListEntry struct {
@@ -52,31 +141,6 @@ type Coordniate struct {
 	Type CoordinateType `json:"type"`
 }
 
-type LLRequest struct {
-	BaseRequest
-	WithSublines      bool               `json:"withSublines"`
-	DataReleaseID     string             `json:"dataReleaseID"`
-	ModificationTypes []ModificationType `json:"modificationTypes"`
-}
-
-type LLResponse struct {
-	ReturnCode    GeofoxReturnCode `json:"returnCode"`
-	ErrorText     string           `json:"errorText"`
-	ErrorDevInfo  string           `json:"errorDevInfo"`
-	DataReleaseID string           `json:"dataReleaseID"`
-	Lines         []LineListEntry  `json:"lines"`
-}
-
-type LineListEntry struct {
-	ID               string             `json:"id"`
-	Name             string             `json:"name"`
-	CarrierNameShort string             `json:"carrierNameShort"`
-	CarrierNameLong  string             `json:"carrierNameLong"`
-	Sublines         []SublineListEntry `json:"sublines"`
-	Exists           bool               `json:"exists"`
-	Type             ServiceType        `json:"type"`
-}
-
 type SublineListEntry struct {
 	SublineNumber   string         `json:"sublineNumber"`
 	VehicleType     VehicleType    `json:"vehicleType"`
@@ -93,4 +157,14 @@ type ServiceType struct {
 type StationLight struct {
 	ID   string `json:"id"`
 	Name string `json:"json"`
+}
+
+type LineListEntry struct {
+	ID               string             `json:"id"`
+	Name             string             `json:"name"`
+	CarrierNameShort string             `json:"carrierNameShort"`
+	CarrierNameLong  string             `json:"carrierNameLong"`
+	Sublines         []SublineListEntry `json:"sublines"`
+	Exists           bool               `json:"exists"`
+	Type             ServiceType        `json:"type"`
 }
