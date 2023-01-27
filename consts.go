@@ -89,3 +89,13 @@ const (
 	TariffRegionZG           TariffRegionType = "ZG"
 	TariffRegionStadtverkehr TariffRegionType = "STADTVERKEHR"
 )
+
+type SDType string
+
+const (
+	SDUnknown     SDType = "UNKNOWN"
+	SDStation     SDType = "STATION"
+	SDAddress     SDType = "ADDRESS"
+	SDPOI         SDType = "POI"
+	SDCoodrdinate SDType = "COORDINATE"
+)
