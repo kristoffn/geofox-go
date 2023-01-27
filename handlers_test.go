@@ -14,7 +14,6 @@ func TestAPI_Init(t *testing.T) {
 	setupTestServer()
 	testMux.HandleFunc("/init", func(w http.ResponseWriter, r *http.Request) {
 		response := InitResponse{
-			ReturnCode:     "test-return-code",
 			BeginOfService: "2000-01-01",
 			EndOfService:   "2000-01-02",
 			ID:             "test-id",
@@ -23,6 +22,7 @@ func TestAPI_Init(t *testing.T) {
 			BuildTime:      "2000-01-04",
 			BuildText:      "test-build",
 		}
+		response.ReturnCode = "test-return-code"
 		responseBytes, err := json.Marshal(response)
 		assert.Nil(t, err)
 		w.Write(responseBytes) //nolint
