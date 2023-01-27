@@ -68,3 +68,24 @@ const (
 	STChange             SimpleType = "CHANGE"
 	STChangeSamePlatform SimpleType = "CHANGE_SAME_PLATFORM"
 )
+
+type ExtraFareType string
+
+const (
+	NoExtraFare       ExtraFareType = "NO"
+	ExtraFarePossible ExtraFareType = "POSSIBLE"
+	ExtraFareRequired ExtraFareType = "REQUIRED"
+)
+
+type TariffRegionType string
+
+const (
+	TariffRegionZone         TariffRegionType = "ZONE"
+	TariffRegionGHZone       TariffRegionType = "GH_ZONE"
+	TariffRegionRing         TariffRegionType = "RING"
+	TariffRegionCounty       TariffRegionType = "COUNTY"
+	TariffRegionGH           TariffRegionType = "GH"
+	TariffRegionNet          TariffRegionType = "NET"
+	TariffRegionZG           TariffRegionType = "ZG"
+	TariffRegionStadtverkehr TariffRegionType = "STADTVERKEHR"
+)
