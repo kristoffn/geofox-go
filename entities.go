@@ -68,6 +68,37 @@ type TariffResponse struct {
 	TariffInfos []TariffInfo `json:"tariffInfos"`
 }
 
+type CNRequest struct {
+	BaseRequest
+	Name            SDName         `json:"theName"`
+	MaxList         int32          `json:"maxList"`
+	MaxDistance     int32          `json:"maxDistance"`
+	CoordinateType  CoordinateType `json:"coordinateType"`
+	TariffDetails   bool           `json:"tariffDetails"`
+	AllowTypeSwitch bool           `json:"allowTypeSwitch"`
+}
+
+type CNResponse struct {
+	BaseResponse
+	Results []RegionalSDName `json:"results"`
+}
+
+type RegionalSDName struct {
+	Name                  string        `json:"name"`
+	City                  string        `json:"city"`
+	CombinedName          string        `json:"combinedName"`
+	ID                    string        `json:"id"`
+	GlobalID              string        `json:"globalId"`
+	Type                  SDType        `json:"type"`
+	Coordinate            Coordniate    `json:"coordinate"`
+	Layer                 int32         `json:"layer"`
+	TariffDetails         TariffDetails `json:"tariffDetails"`
+	ServiceTypes          []string      `json:"serviceTypes"`
+	HasStationInformation bool          `json:"hasStationInformation"`
+	Distance              int32         `json:"distance"`
+	Time                  int32         `json:"time"`
+}
+
 type TariffInfo struct {
 	TariffName    string             `json:"tariffName"`
 	TariffRegions []TariffRegionInfo `json:"tariffRegions"`
@@ -167,4 +198,36 @@ type LineListEntry struct {
 	Sublines         []SublineListEntry `json:"sublines"`
 	Exists           bool               `json:"exists"`
 	Type             ServiceType        `json:"type"`
+}
+
+type SDName struct {
+	Name                  string        `json:"name"`
+	City                  string        `json:"city"`
+	CombinedName          string        `json:"combinedName"`
+	ID                    string        `json:"id"`
+	GlobalID              string        `json:"globalId"`
+	Type                  SDType        `json:"type"`
+	Coordinate            Coordniate    `json:"coordinate"`
+	Layer                 int32         `json:"layer"`
+	TariffDetails         TariffDetails `json:"tariffDetails"`
+	SerivceTypes          []string      `json:"serviceTypes"`
+	HasStationInformation bool          `json:"hasStationInformation"`
+}
+
+type TariffDetails struct {
+	InnerCity       bool     `json:"innerCity"`
+	City            bool     `json:"city"`
+	CityTraffic     bool     `json:"cityTraffic"`
+	Gratis          bool     `json:"gratis"`
+	GreaterArea     bool     `json:"greaterArea"`
+	SHVillageID     int32    `json:"shVillageId"`
+	SHTariffZone    int32    `json:"shTariffZone"`
+	TariffZones     []int32  `json:"tariffZones"`
+	Regions         []int32  `json:"regions"`
+	Counties        []string `json:"counties"`
+	Rings           []string `json:"rings"`
+	FareStage       bool     `json:"fareStage"`
+	FareStageNumber int32    `json:"fareStageNumber"`
+	TariffNames     []string `json:"tariffNames"`
+	UniqueValues    bool     `json:"uniqueValues"`
 }
