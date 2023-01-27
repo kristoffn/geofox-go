@@ -68,6 +68,37 @@ type TariffResponse struct {
 	TariffInfos []TariffInfo `json:"tariffInfos"`
 }
 
+type CNRequest struct {
+	BaseRequest
+	Name            SDName         `json:"theName"`
+	MaxList         int32          `json:"maxList"`
+	MaxDistance     int32          `json:"maxDistance"`
+	CoordinateType  CoordinateType `json:"coordinateType"`
+	TariffDetails   bool           `json:"tariffDetails"`
+	AllowTypeSwitch bool           `json:"allowTypeSwitch"`
+}
+
+type CNResponse struct {
+	BaseResponse
+	Results []RegionalSDName `json:"results"`
+}
+
+type RegionalSDName struct {
+	Name                  string        `json:"name"`
+	City                  string        `json:"city"`
+	CombinedName          string        `json:"combinedName"`
+	ID                    string        `json:"id"`
+	GlobalID              string        `json:"globalId"`
+	Type                  SDType        `json:"type"`
+	Coordinate            Coordniate    `json:"coordinate"`
+	Layer                 int32         `json:"layer"`
+	TariffDetails         TariffDetails `json:"tariffDetails"`
+	ServiceTypes          []string      `json:"serviceTypes"`
+	HasStationInformation bool          `json:"hasStationInformation"`
+	Distance              int32         `json:"distance"`
+	Time                  int32         `json:"time"`
+}
+
 type TariffInfo struct {
 	TariffName    string             `json:"tariffName"`
 	TariffRegions []TariffRegionInfo `json:"tariffRegions"`
