@@ -99,3 +99,85 @@ const (
 	SDPOI         SDType = "POI"
 	SDCoodrdinate SDType = "COORDINATE"
 )
+
+type PersonType string
+
+const (
+	PersonTypeAll        PersonType = "ALL"
+	PersonTypeAdult      PersonType = "ADULT"
+	PersonTypeElderly    PersonType = "ELDERLY"
+	PersonTypeApprentice PersonType = "APPRENTICE"
+	PersonTypePupil      PersonType = "PUPIL"
+	PersonTypeStudent    PersonType = "STUDENT"
+	PersonTypeChild      PersonType = "CHILD"
+)
+
+type RegionType string
+
+const (
+	RegionTypeRing   RegionType = "RING"
+	RegionTypeZone   RegionType = "ZONE"
+	RegionTypeCounty RegionType = "COUNTY"
+	RegionTypeGhZone RegionType = "GH_ZONE"
+)
+
+type RealTimeType string
+
+const (
+	RTPlandata RealTimeType = "PLANDATA"
+	RT         RealTimeType = "REALTIME"
+	RTAuto     RealTimeType = "AUTO"
+)
+
+type TransportMode string
+
+const (
+	TMBus                 TransportMode = "BUS"
+	TMTrain               TransportMode = "TRAIN"
+	TMShip                TransportMode = "SHIP"
+	TMFootpath            TransportMode = "FOOTPATH"
+	TMBicycle             TransportMode = "BICYCLE"
+	TMAirplan             TransportMode = "AIRPLANE"
+	TMChange              TransportMode = "CHANGE"
+	TMChangeSamePlatform  TransportMode = "CHANGE_SAME_PLATFORM"
+	TMActivityBikeAndRide TransportMode = "ACTIVITY_BIKE_AND_RIDE"
+)
+
+type BicycleTransportProfile string
+
+const (
+	BTPNormal     BicycleTransportProfile = "BICYCLE_NORMAL"
+	BTPRacing     BicycleTransportProfile = "BICYCLE_RACING"
+	BTPQuietRoads BicycleTransportProfile = "BICYCLE_QUIET_ROADS"
+	BTPMainRoads  BicycleTransportProfile = "BICYCLE_MAIN_ROADS"
+	BTPBadWeather BicycleTransportProfile = "BICYCLE_BAD_WEATHER"
+	BTPFootNormal BicycleTransportProfile = "FOOT_NORMAL"
+)
+
+type TransportServiceType string
+
+const (
+	TSZug        TransportServiceType = "ZUG"
+	TSUBahn      TransportServiceType = "UBAHN"
+	TSSBahn      TransportServiceType = "SBAHN"
+	TSAKN        TransportServiceType = "AKN"
+	TSRBahn      TransportServiceType = "RBAHN"
+	TSFernbahn   TransportServiceType = "FERNBAHN"
+	TSBus        TransportServiceType = "BUS"
+	TSStadtbus   TransportServiceType = "STADTBUS"
+	TSMetrobus   TransportServiceType = "METROBUS"
+	TSSchnellbus TransportServiceType = "SCHNELLBUS"
+	TSNachtbus   TransportServiceType = "NACHTBUS"
+	TSXpressbus  TransportServiceType = "XPRESSBUS"
+	TSEilbus     TransportServiceType = "EILBUS"
+	TSAST        TransportServiceType = "AST"
+	TSFaehre     TransportServiceType = "FAEHRE"
+)
+
+type DepartureCourseSegmentType string
+
+const (
+	DCSBefore DepartureCourseSegmentType = "BEFORE"
+	DCSAfter  DepartureCourseSegmentType = "AFTER"
+	DCSAll    DepartureCourseSegmentType = "ALL"
+)

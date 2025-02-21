@@ -1,19 +1,9 @@
 package geofox
 
-type BaseRequest struct {
-	Language   string `json:"language,omitempty"`
-	Version    int32  `json:"version,omitempty"`
-	FilterType Filter `json:"filterType,omitempty"`
-}
-
 type BaseResponse struct {
 	ReturnCode   GeofoxReturnCode `json:"returnCode,omitempty"`
 	ErrorText    string           `json:"errorText,omitempty"`
 	ErrorDevInfo string           `json:"errorDevInfo,omitempty"`
-}
-
-type InitRequest struct {
-	BaseRequest
 }
 
 type InitResponse struct {
@@ -28,24 +18,11 @@ type InitResponse struct {
 	Version        string     `json:"version"`
 	Properties     []Property `json:"properties"`
 }
-type LSRequest struct {
-	BaseRequest
-	DataReleaseID     string             `json:"dataReleaseID"`
-	ModificationTypes []ModificationType `json:"modificationTypes"`
-	CoordinateType    CoordinateType     `json:"coordinateType,omitempty"`
-	FilterEquivalent  bool               `json:"filterEquivalent,omitempty"`
-}
 
 type LSResponse struct {
 	BaseResponse
 	DataReleaseID string             `json:"dataReleaseID,omitempty"`
 	Stations      []StationListEntry `json:"stations,omitempty"`
-}
-type LLRequest struct {
-	BaseRequest
-	WithSublines      bool               `json:"withSublines"`
-	DataReleaseID     string             `json:"dataReleaseID"`
-	ModificationTypes []ModificationType `json:"modificationTypes"`
 }
 
 type LLResponse struct {
@@ -54,28 +31,9 @@ type LLResponse struct {
 	Lines         []LineListEntry `json:"lines"`
 }
 
-type TariffRequest struct {
-	BaseRequest
-	ScheduleElements     []ScheduleElementLight `json:"scheduleElements"`
-	Departure            GTITime                `json:"departure"`
-	Arrival              GTITime                `json:"arrival"`
-	ReturnReduced        bool                   `json:"returnReduced"`
-	ReturnPartialTickets bool                   `json:"returnPartialTickets"`
-}
-
 type TariffResponse struct {
 	BaseResponse
 	TariffInfos []TariffInfo `json:"tariffInfos"`
-}
-
-type CNRequest struct {
-	BaseRequest
-	Name            SDName         `json:"theName"`
-	MaxList         int32          `json:"maxList"`
-	MaxDistance     int32          `json:"maxDistance"`
-	CoordinateType  CoordinateType `json:"coordinateType"`
-	TariffDetails   bool           `json:"tariffDetails"`
-	AllowTypeSwitch bool           `json:"allowTypeSwitch"`
 }
 
 type CNResponse struct {
@@ -230,4 +188,90 @@ type TariffDetails struct {
 	FareStageNumber int32    `json:"fareStageNumber"`
 	TariffNames     []string `json:"tariffNames"`
 	UniqueValues    bool     `json:"uniqueValues"`
+}
+
+type TariffOptimizerTicket struct {
+	tariffKindId     int32      `json:"tariffKindId,omitempty"`
+	tariffKindLabel  string     `json:"tariffKindLabel,omitempty"`
+	tariffLevelId    int32      `json:"tariffLevelId,omitempty"`
+	tariffLevelLabel string     `json:"tariffLevelLabel,omitempty"`
+	tariffRegions    []string   `json:"tariffRegions"`
+	regionType       RegionType `json:"regionType"`
+	count            int32      `json:"count,omitempty"`
+	extraFare        bool       `json:"extraFare,omitempty"`
+	personType       PersonType `json:"personType"`
+	centPrice        int32      `json:"centPrice,omitempty"`
+}
+
+type SingleTicketOptimizerRequestRoute struct {
+	Trip                      SingleTicketOptimizerRequestTrip `json:"trip"`
+	Departure                 string                           `json:"departure"`
+	Arrival                   string                           `json:"arrival"`
+	TariffRegions             TariffOptimizerRegions           `json:"tariffRegions"`
+	SingleTicketTariffLevelID int32                            `json:"singleTicketTariffLevelId,omitempty"`
+	ExtraFare                 ExtraFareType                    `json:"extraFareType"`
+}
+
+type SingleTicketOptimizerRequestTrip struct {
+	Start       SingleTicketOptimizerRequestStation `json:"start"`
+	Destination SingleTicketOptimizerRequestStation `json:"destination"`
+	Line        SingleTicketOptimizerRequestLine    `json:"line"`
+	VehicleType string                              `json:"vehicleType"`
+}
+
+type SingleTicketOptimizerRequestStation struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+type SingleTicketOptimizerRequestLine struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+type TariffOptimizerRegions struct {
+	Zones     []TariffRegions `json:"zones"`
+	Rings     []TariffRegions `json:"rings"`
+	Countries []TariffRegions `json:"counties"`
+}
+
+type TariffRegions struct {
+	Regions []string `json:"regions"`
+}
+
+type BoundingBox struct {
+	LowerLeft  Coordniate `json:"lowerLeft"`
+	UpperRight Coordniate `json:"upperRight"`
+}
+
+type Penalty struct {
+	Name  string `json:"name"`
+	Value string `json:"value"`
+}
+
+type ContSearchByServiceId struct {
+	ServiceID                   int32   `json:"serviceId,omitempty"`
+	LineKey                     string  `json:"lineKey"`
+	PlannedDepartureArrivalTime GTITime `json:"plannedDepArrTime"`
+	AdditionalOffset            int32   `json:"additionalOffset,omitempty"`
+}
+
+type TariffInfoSelector struct {
+	Tariff        string  `json:"tariff"`        //default: HVV
+	TariffRegions bool    `json:"tariffRegions"` //default: true
+	Kinds         []int32 `json:"kinds"`
+	Groups        []int32 `json:"groups"`
+	Blacklist     bool    `json:"blacklist"` //default: false
+}
+
+type TimeRange struct {
+	Begin string `json:"begin,omitempty"`
+	End   string `json:"end,omitempty"`
+}
+
+type DLFilterEntry struct {
+	ServiceID   string   `json:"serviceID,omitempty"`
+	StationIDs  []string `json:"stationIDs,omitempty"`
+	Label       string   `json:"label,omitempty"`
+	ServiceName string   `json:"serviceName,omitempty"`
 }
