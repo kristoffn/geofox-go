@@ -29,7 +29,7 @@ func TestAPI_Init(t *testing.T) {
 	})
 	resp, err := testClient.Init(context.Background()) //nolint
 	assert.Nil(t, err)
-	assert.Equal(t, "test-return-code", resp.ReturnCode)
+	assert.Equal(t, GeofoxReturnCode("test-return-code"), resp.ReturnCode)
 	assert.Equal(t, "2000-01-01", resp.BeginOfService)
 	assert.Equal(t, "2000-01-02", resp.EndOfService)
 	assert.Equal(t, "test-id", resp.ID)
