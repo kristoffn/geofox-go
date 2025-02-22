@@ -51,12 +51,13 @@ func TestAPI_Init(t *testing.T) {
 }
 
 func TestAPI_ListStations(t *testing.T) {
+	testDataReleaseID := "test-data-release-id"
 	// Happy path
 	setupTestServer()
 	testMux.HandleFunc("/listStations", func(w http.ResponseWriter, r *http.Request) {
 		response := LSResponse{
-			DataReleaseID: "test-data-release-id",
-			Stations: []StationListEntry{
+			DataReleaseID: &testDataReleaseID,
+			Stations: &[]StationListEntry{
 				{}, {}, {},
 			},
 		}
@@ -68,8 +69,8 @@ func TestAPI_ListStations(t *testing.T) {
 		[]ModificationType{ModTypeMain},
 		EPSG4326)
 	assert.Nil(t, err)
-	assert.Equal(t, "test-data-release-id", resp.DataReleaseID)
-	assert.Equal(t, 3, len(resp.Stations))
+	assert.Equal(t, &testDataReleaseID, resp.DataReleaseID)
+	assert.Equal(t, 3, len(*resp.Stations))
 	teardownTestServer()
 
 	// Bad path - error 404

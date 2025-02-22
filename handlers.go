@@ -114,3 +114,27 @@ func (a *API) checkName(ctx context.Context, name *SDName) (*CNResponse, error) 
 	}
 	return &cnResp, nil
 }
+
+func (a *API) GetAnnouncements(ctx context.Context, lines []string, fullAnnouncement, showBroadcastRelevant bool) (*AnnouncementResponse, error) {
+	req := AnnouncementRequest{
+		Names:                 lines,
+		Full:                  fullAnnouncement,
+		ShowBroadcastRelevant: showBroadcastRelevant,
+	}
+
+	reqBytes, err := json.Marshal(req)
+	if err != nil {
+		return nil, fmt.Errorf("failed to marshal AnnouncementRequest object: %s", err.Error())
+	}
+	reqReader := strings.NewReader(string(reqBytes))
+
+	resp, err := a.sendRequest(ctx, http.MethodPost, "/getAnnouncements", reqReader)
+	if err != nil {
+		return nil, err
+	}
+	var announcementResp AnnouncementResponse
+	if err = json.Unmarshal(resp.Body, &announcementResp); err != nil {
+		return nil, fmt.Errorf("failed to marshal body bytes: %s", err.Error())
+	}
+	return &announcementResp, nil
+}
