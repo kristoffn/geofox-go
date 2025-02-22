@@ -181,3 +181,59 @@ const (
 	DCSAfter  DepartureCourseSegmentType = "AFTER"
 	DCSAll    DepartureCourseSegmentType = "ALL"
 )
+
+type DayType string
+
+const (
+	DTWeekday DayType = "WEEKDAY"
+	DTWeekend DayType = "WEEKEND"
+)
+
+type TicketClassType string
+
+const (
+	TCNone    TicketClassType = "NONE"
+	TCSecond  TicketClassType = "SECOND"
+	TCFirst   TicketClassType = "FIRST"
+	TCSchnell TicketClassType = "SCHNELL"
+)
+
+type DiscountType string
+
+const (
+	DiscontNone   DiscountType = "NONE"
+	DiscontOnline DiscountType = "ONLINE"
+	DiscontSocial DiscountType = "SOCIAL"
+)
+
+type TicketType string
+
+const (
+	TicketTypeOccasional TicketType = "OCCASIONAL_TICKET"
+	TicketTypeSeasonal   TicketType = "SEASON_TICKET"
+)
+
+type ElevatorButtonType string
+
+const (
+	ElevatorButtonBraille ElevatorButtonType = "BRAILLE"
+	ElevatorButtonAcustic ElevatorButtonType = "ACUSTIC"
+	ElevatorButtonCombi   ElevatorButtonType = "COMBI"
+	ElevatorButtonUnkown  ElevatorButtonType = "UNKNOWN"
+)
+
+type ElevatorStateType string
+
+const (
+	ElevatorStateReady      ElevatorStateType = "READY"
+	ElevatorStateOutOfOrder ElevatorStateType = "OUTOFORDER"
+	ElevatorStateUnkown     ElevatorStateType = "UNKNOWN"
+)
+
+type LocationType string
+
+const (
+	LocationSingleLine        LocationType = "SINGLE_LINE"
+	LocationAllLinesOfCarrier LocationType = "ALL_LINES_OF_CARRIER"
+	LocationCompleteNetwork   LocationType = "COMPLETE_NET"
+)
