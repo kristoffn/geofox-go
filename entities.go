@@ -150,16 +150,16 @@ type TariffDetails struct {
 }
 
 type TariffOptimizerTicket struct {
-	tariffKindId     int32      `json:"tariffKindId,omitempty"`
-	tariffKindLabel  string     `json:"tariffKindLabel,omitempty"`
-	tariffLevelId    int32      `json:"tariffLevelId,omitempty"`
-	tariffLevelLabel string     `json:"tariffLevelLabel,omitempty"`
-	tariffRegions    []string   `json:"tariffRegions"`
-	regionType       RegionType `json:"regionType"`
-	count            int32      `json:"count,omitempty"`
-	extraFare        bool       `json:"extraFare,omitempty"`
-	personType       PersonType `json:"personType"`
-	centPrice        int32      `json:"centPrice,omitempty"`
+	TariffKindId     int32      `json:"tariffKindId,omitempty"`
+	TariffKindLabel  string     `json:"tariffKindLabel,omitempty"`
+	TariffLevelId    int32      `json:"tariffLevelId,omitempty"`
+	TariffLevelLabel string     `json:"tariffLevelLabel,omitempty"`
+	TariffRegions    []string   `json:"tariffRegions"`
+	RegionType       RegionType `json:"regionType"`
+	Count            int32      `json:"count,omitempty"`
+	ExtraFare        bool       `json:"extraFare,omitempty"`
+	PersonType       PersonType `json:"personType"`
+	CentPrice        int32      `json:"centPrice,omitempty"`
 }
 
 type SingleTicketOptimizerRequestRoute struct {
