@@ -6,6 +6,8 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/kristoffn/geofox-go/internal/consts"
+	"github.com/kristoffn/geofox-go/internal/types"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -57,7 +59,7 @@ func TestAPI_ListStations(t *testing.T) {
 	testMux.HandleFunc("/listStations", func(w http.ResponseWriter, r *http.Request) {
 		response := LSResponse{
 			DataReleaseID: &testDataReleaseID,
-			Stations: &[]StationListEntry{
+			Stations: &[]types.StationListEntry{
 				{}, {}, {},
 			},
 		}
@@ -66,8 +68,8 @@ func TestAPI_ListStations(t *testing.T) {
 		w.Write(responseBytes) //nolint
 	})
 	resp, err := testClient.ListStations(context.Background(),
-		[]ModificationType{ModTypeMain},
-		EPSG4326)
+		[]consts.ModificationType{consts.ModTypeMain},
+		consts.EPSG4326)
 	assert.Nil(t, err)
 	assert.Equal(t, &testDataReleaseID, resp.DataReleaseID)
 	assert.Equal(t, 3, len(*resp.Stations))
@@ -79,8 +81,8 @@ func TestAPI_ListStations(t *testing.T) {
 		w.WriteHeader(http.StatusNotFound)
 	})
 	resp, err = testClient.ListStations(context.Background(),
-		[]ModificationType{ModTypeMain},
-		EPSG4326)
+		[]consts.ModificationType{consts.ModTypeMain},
+		consts.EPSG4326)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "status code: 404")
 	teardownTestServer()
@@ -91,8 +93,8 @@ func TestAPI_ListStations(t *testing.T) {
 		w.Write([]byte{'r', 'a', 'n', 'd', 'o', 'm'}) //nolint
 	})
 	resp, err = testClient.ListStations(context.Background(),
-		[]ModificationType{ModTypeMain},
-		EPSG4326)
+		[]consts.ModificationType{consts.ModTypeMain},
+		consts.EPSG4326)
 	assert.Nil(t, resp)
 	assert.Contains(t, err.Error(), "failed to marshal body bytes")
 	teardownTestServer()

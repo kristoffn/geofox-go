@@ -1,9 +1,9 @@
-package geofox
+package consts
 
 const (
-	defaultScheme   = "https"
-	defaultHostname = "gti.geofox.de"
-	defaultBasePath = "/gti/public"
+	DefaultScheme   = "https"
+	DefaultHostname = "gti.geofox.de"
+	DefaultBasePath = "/gti/public"
 )
 
 type CoordinateType string

@@ -7,6 +7,9 @@ import (
 	"fmt"
 	"net/http"
 	"strings"
+
+	"github.com/kristoffn/geofox-go/internal/consts"
+	"github.com/kristoffn/geofox-go/internal/types"
 )
 
 func (a *API) Init(ctx context.Context) (*InitResponse, error) {
@@ -30,7 +33,7 @@ func (a *API) Init(ctx context.Context) (*InitResponse, error) {
 	return &initResp, nil
 }
 
-func (a *API) ListStations(ctx context.Context, modTypes []ModificationType, coordType CoordinateType) (*LSResponse, error) {
+func (a *API) ListStations(ctx context.Context, modTypes []consts.ModificationType, coordType consts.CoordinateType) (*LSResponse, error) {
 	req := LSRequest{
 		ModificationTypes: modTypes,
 		CoordinateType:    coordType,
@@ -55,7 +58,7 @@ func (a *API) ListStations(ctx context.Context, modTypes []ModificationType, coo
 	return &lsResp, nil
 }
 
-func (a *API) ListLines(ctx context.Context, modTypes []ModificationType, withSublines bool) (*LLResponse, error) {
+func (a *API) ListLines(ctx context.Context, modTypes []consts.ModificationType, withSublines bool) (*LLResponse, error) {
 	req := LLRequest{
 		ModificationTypes: modTypes,
 		WithSublines:      withSublines,
@@ -79,22 +82,22 @@ func (a *API) ListLines(ctx context.Context, modTypes []ModificationType, withSu
 	return &llResp, nil
 }
 
-func (a *API) CheckByName(ctx context.Context, name string, typ SDType) (*CNResponse, error) {
-	sdName := SDName{
+func (a *API) CheckByName(ctx context.Context, name string, typ consts.SDType) (*CNResponse, error) {
+	sdName := types.SDName{
 		Name: name,
 		Type: typ,
 	}
 	return a.checkName(ctx, &sdName)
 }
 
-func (a *API) checkName(ctx context.Context, name *SDName) (*CNResponse, error) {
+func (a *API) checkName(ctx context.Context, name *types.SDName) (*CNResponse, error) {
 	if name == nil {
 		return nil, errors.New("name object is nil")
 	}
 	req := CNRequest{
 		Name:           *name,
 		MaxList:        1,
-		CoordinateType: EPSG4326,
+		CoordinateType: consts.EPSG4326,
 	}
 
 	reqBytes, err := json.Marshal(req)

@@ -12,6 +12,8 @@ import (
 	"log"
 	"net/http"
 	"net/http/httputil"
+
+	"github.com/kristoffn/geofox-go/internal/consts"
 )
 
 const (
@@ -41,7 +43,7 @@ func New(username, password string, opts ...Option) (*API, error) {
 
 	api.Username = username
 	api.Password = password
-	api.BaseURL = fmt.Sprintf("%s://%s%s", defaultScheme, defaultHostname, defaultBasePath)
+	api.BaseURL = fmt.Sprintf("%s://%s%s", consts.DefaultScheme, consts.DefaultHostname, consts.DefaultBasePath)
 
 	return api, nil
 }

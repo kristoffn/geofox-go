@@ -1,4 +1,6 @@
-package geofox
+package types
+
+import "github.com/kristoffn/geofox-go/internal/consts"
 
 type RegionalSDName struct {
 	Name                  string        `json:"name"`
@@ -6,7 +8,7 @@ type RegionalSDName struct {
 	CombinedName          string        `json:"combinedName"`
 	ID                    string        `json:"id"`
 	GlobalID              string        `json:"globalId"`
-	Type                  SDType        `json:"type"`
+	Type                  consts.SDType `json:"type"`
 	Coordinate            Coordniate    `json:"coordinate"`
 	Layer                 int32         `json:"layer"`
 	TariffDetails         TariffDetails `json:"tariffDetails"`
@@ -17,17 +19,17 @@ type RegionalSDName struct {
 }
 
 type TariffInfo struct {
-	TariffName    string             `json:"tariffName"`
-	TariffRegions []TariffRegionInfo `json:"tariffRegions"`
-	RegionTexts   []string           `json:"regionTexts"`
-	ExtraFareType ExtraFareType      `json:"extraFareType"`
-	TicketInfos   []TicketInfo       `json:"ticketInfos"`
-	TicketRemarks string             `json:"ticketRemarks"`
+	TariffName    string               `json:"tariffName"`
+	TariffRegions []TariffRegionInfo   `json:"tariffRegions"`
+	RegionTexts   []string             `json:"regionTexts"`
+	ExtraFareType consts.ExtraFareType `json:"extraFareType"`
+	TicketInfos   []TicketInfo         `json:"ticketInfos"`
+	TicketRemarks string               `json:"ticketRemarks"`
 }
 
 type TariffRegionInfo struct {
-	RegionType   TariffRegionType   `json:"regionType"`
-	Alternatives []TariffRegionList `json:"alternatives"`
+	RegionType   consts.TariffRegionType `json:"regionType"`
+	Alternatives []TariffRegionList      `json:"alternatives"`
 }
 
 type TariffRegionList struct {
@@ -35,24 +37,24 @@ type TariffRegionList struct {
 }
 
 type TicketInfo struct {
-	TariffKindID          int32            `json:"tariffKindID"`
-	TariffKindLabel       string           `json:"tariffKindLabel"`
-	TariffLevelId         int32            `json:"tariffLevelID"`
-	TariffLevelLabel      string           `json:"tariffLevelLabel"`
-	TariffGroupID         int32            `json:"tariffGroupID"`
-	TariffGroupLabel      string           `json:"tariffGroupLabel"`
-	ViaPathID             int              `json:"viaPathId"`
-	BasePrice             float64          `json:"basePrice"`
-	ExtraFarePrice        float64          `json:"extraFarePrice"`
-	ReducedBasePrice      float64          `json:"reducedBasePrice"`
-	ReducedExtraFarePrice float64          `json:"reducedExtraFarePrice"`
-	Currency              string           `json:"currency"`
-	RegionType            TariffRegionType `json:"regionType"`
-	NotRecommended        bool             `json:"notRecommended"`
-	ShopLinkRegular       string           `json:"shopLinkRegular"`
-	ShopLinkExtraFare     string           `json:"shopLinkExtraFare"`
-	StartStationID        string           `json:"startStationId"`
-	EndStationID          string           `json:"endStationId"`
+	TariffKindID          int32                   `json:"tariffKindID"`
+	TariffKindLabel       string                  `json:"tariffKindLabel"`
+	TariffLevelId         int32                   `json:"tariffLevelID"`
+	TariffLevelLabel      string                  `json:"tariffLevelLabel"`
+	TariffGroupID         int32                   `json:"tariffGroupID"`
+	TariffGroupLabel      string                  `json:"tariffGroupLabel"`
+	ViaPathID             int                     `json:"viaPathId"`
+	BasePrice             float64                 `json:"basePrice"`
+	ExtraFarePrice        float64                 `json:"extraFarePrice"`
+	ReducedBasePrice      float64                 `json:"reducedBasePrice"`
+	ReducedExtraFarePrice float64                 `json:"reducedExtraFarePrice"`
+	Currency              string                  `json:"currency"`
+	RegionType            consts.TariffRegionType `json:"regionType"`
+	NotRecommended        bool                    `json:"notRecommended"`
+	ShopLinkRegular       string                  `json:"shopLinkRegular"`
+	ShopLinkExtraFare     string                  `json:"shopLinkExtraFare"`
+	StartStationID        string                  `json:"startStationId"`
+	EndStationID          string                  `json:"endStationId"`
 }
 
 type GTITime struct {
@@ -72,34 +74,34 @@ type Property struct {
 }
 
 type StationListEntry struct {
-	ID           string        `json:"id"`
-	Name         string        `json:"name"`
-	City         string        `json:"city"`
-	CombinedName string        `json:"combinedName"`
-	Shortcuts    []string      `json:"shortcuts"`
-	Aliasses     []string      `json:"aliasses"`
-	VehicleTypes []VehicleType `json:"vehicleTypes"`
-	Coordniate   Coordniate    `json:"coordinate"`
-	Exists       bool          `json:"exists"`
+	ID           string               `json:"id"`
+	Name         string               `json:"name"`
+	City         string               `json:"city"`
+	CombinedName string               `json:"combinedName"`
+	Shortcuts    []string             `json:"shortcuts"`
+	Aliasses     []string             `json:"aliasses"`
+	VehicleTypes []consts.VehicleType `json:"vehicleTypes"`
+	Coordniate   Coordniate           `json:"coordinate"`
+	Exists       bool                 `json:"exists"`
 }
 
 type Coordniate struct {
-	X    float64        `json:"x"`
-	Y    float64        `json:"y"`
-	Type CoordinateType `json:"type"`
+	X    float64               `json:"x"`
+	Y    float64               `json:"y"`
+	Type consts.CoordinateType `json:"type"`
 }
 
 type SublineListEntry struct {
-	SublineNumber   string         `json:"sublineNumber"`
-	VehicleType     VehicleType    `json:"vehicleType"`
-	StationSequence []StationLight `json:"stationSequence"`
+	SublineNumber   string             `json:"sublineNumber"`
+	VehicleType     consts.VehicleType `json:"vehicleType"`
+	StationSequence []StationLight     `json:"stationSequence"`
 }
 
 type ServiceType struct {
-	SimpleType SimpleType `json:"simpleType"`
-	ShortInfo  string     `json:"shortInfo"`
-	LongInfo   string     `json:"longInfo"`
-	Model      string     `json:"model"`
+	SimpleType consts.SimpleType `json:"simpleType"`
+	ShortInfo  string            `json:"shortInfo"`
+	LongInfo   string            `json:"longInfo"`
+	Model      string            `json:"model"`
 }
 
 type StationLight struct {
@@ -123,7 +125,7 @@ type SDName struct {
 	CombinedName          string        `json:"combinedName,omitempty"`
 	ID                    string        `json:"id,omitempty"`
 	GlobalID              string        `json:"globalId,omitempty"`
-	Type                  SDType        `json:"type,omitempty"`
+	Type                  consts.SDType `json:"type,omitempty"`
 	Coordinate            Coordniate    `json:"coordinate,omitempty"`
 	Layer                 int32         `json:"layer,omitempty"`
 	TariffDetails         TariffDetails `json:"tariffDetails,omitempty"`
@@ -150,16 +152,16 @@ type TariffDetails struct {
 }
 
 type TariffOptimizerTicket struct {
-	TariffKindId     int32      `json:"tariffKindId,omitempty"`
-	TariffKindLabel  string     `json:"tariffKindLabel,omitempty"`
-	TariffLevelId    int32      `json:"tariffLevelId,omitempty"`
-	TariffLevelLabel string     `json:"tariffLevelLabel,omitempty"`
-	TariffRegions    []string   `json:"tariffRegions"`
-	RegionType       RegionType `json:"regionType"`
-	Count            int32      `json:"count,omitempty"`
-	ExtraFare        bool       `json:"extraFare,omitempty"`
-	PersonType       PersonType `json:"personType"`
-	CentPrice        int32      `json:"centPrice,omitempty"`
+	TariffKindId     int32             `json:"tariffKindId,omitempty"`
+	TariffKindLabel  string            `json:"tariffKindLabel,omitempty"`
+	TariffLevelId    int32             `json:"tariffLevelId,omitempty"`
+	TariffLevelLabel string            `json:"tariffLevelLabel,omitempty"`
+	TariffRegions    []string          `json:"tariffRegions"`
+	RegionType       consts.RegionType `json:"regionType"`
+	Count            int32             `json:"count,omitempty"`
+	ExtraFare        bool              `json:"extraFare,omitempty"`
+	PersonType       consts.PersonType `json:"personType"`
+	CentPrice        int32             `json:"centPrice,omitempty"`
 }
 
 type SingleTicketOptimizerRequestRoute struct {
@@ -168,7 +170,7 @@ type SingleTicketOptimizerRequestRoute struct {
 	Arrival                   string                           `json:"arrival"`
 	TariffRegions             TariffOptimizerRegions           `json:"tariffRegions"`
 	SingleTicketTariffLevelID int32                            `json:"singleTicketTariffLevelId,omitempty"`
-	ExtraFare                 ExtraFareType                    `json:"extraFareType"`
+	ExtraFare                 consts.ExtraFareType             `json:"extraFareType"`
 }
 
 type SingleTicketOptimizerRequestTrip struct {
@@ -242,7 +244,7 @@ type TicketListTicketInfos struct {
 	TariffLevelLabel     string                    `json:"tariffLevelLabel"`
 	TariffGroupID        int32                     `json:"tariffGroupID,omitempty"`
 	TariffGroupLabel     string                    `json:"tariffGroupLabel,omitempty"`
-	RegionType           TariffRegionType          `json:"regionType,omitempty"`
+	RegionType           consts.TariffRegionType   `json:"regionType,omitempty"`
 	SelectableRegions    int32                     `json:"selectableRegions,omitempty"`    //default: 0
 	RequiredStartStation bool                      `json:"requiredStartStation,omitempty"` //default: false
 	PersonInfos          []PersonInfo              `json:"personInfos,omitempty"`
@@ -251,13 +253,13 @@ type TicketListTicketInfos struct {
 }
 
 type PersonInfo struct {
-	PersonType  PersonType `json:"personType,omitempty"`
-	PersonCount int32      `json:"personCount,omitempty"`
+	PersonType  consts.PersonType `json:"personType,omitempty"`
+	PersonCount int32             `json:"personCount,omitempty"`
 }
 
 type ValidityPeriod struct {
-	Day            DayType      `json:"day"`
-	TimeValidities []TimePeriod `json:"timeValidities,omitempty"`
+	Day            consts.DayType `json:"day"`
+	TimeValidities []TimePeriod   `json:"timeValidities,omitempty"`
 }
 
 type TimePeriod struct {
@@ -266,14 +268,14 @@ type TimePeriod struct {
 }
 
 type TicketListTicketVariant struct {
-	TicketID      int32           `json:"ticketId,omitempty"`
-	KaNummer      int32           `json:"kaNummer,omitempty"`
-	Price         float64         `json:"price,omitempty"`
-	Currency      string          `json:"currency,omitempty"` //default: EUR
-	TicketClass   TicketClassType `json:"ticketClass"`
-	Discont       DiscountType    `json:"discount"`
-	ValidityBegin string          `json:"validityBegin"`
-	ValidityEnd   string          `json:"validityEnd"`
+	TicketID      int32                  `json:"ticketId,omitempty"`
+	KaNummer      int32                  `json:"kaNummer,omitempty"`
+	Price         float64                `json:"price,omitempty"`
+	Currency      string                 `json:"currency,omitempty"` //default: EUR
+	TicketClass   consts.TicketClassType `json:"ticketClass"`
+	Discont       consts.DiscountType    `json:"discount"`
+	ValidityBegin string                 `json:"validityBegin"`
+	ValidityEnd   string                 `json:"validityEnd"`
 }
 
 type TariffZone struct {
@@ -283,11 +285,11 @@ type TariffZone struct {
 }
 
 type TariffKind struct {
-	ID                 int32      `json:"id,omitempty"`
-	Label              string     `json:"label"`
-	RequiresPersonType bool       `json:"requiresPersonType,omitempty"` //default: false
-	TicketType         TicketType `json:"ticketType,omitempty"`
-	LevelCombinations  []int32    `json:"levelCombinations,omitempty"`
+	ID                 int32             `json:"id,omitempty"`
+	Label              string            `json:"label"`
+	RequiresPersonType bool              `json:"requiresPersonType,omitempty"` //default: false
+	TicketType         consts.TicketType `json:"ticketType,omitempty"`
+	LevelCombinations  []int32           `json:"levelCombinations,omitempty"`
 }
 
 type TariffLevel struct {
@@ -297,8 +299,8 @@ type TariffLevel struct {
 }
 
 type RequiredRegionType struct {
-	Type  TariffRegionType `json:"type"`
-	Count int32            `json:"count,omitempty"`
+	Type  consts.TariffRegionType `json:"type"`
+	Count int32                   `json:"count,omitempty"`
 }
 
 type TariffCounty struct {
@@ -307,11 +309,11 @@ type TariffCounty struct {
 }
 
 type Journey struct {
-	JourneyID   string        `json:"journeyID"`
-	Line        Service       `json:"line"`
-	VehicleType VehicleType   `json:"vehicleType"`
-	Realtime    bool          `json:"realtime,omitempty"`
-	Segments    []Pathsegment `json:"segments,omitempty"`
+	JourneyID   string             `json:"journeyID"`
+	Line        Service            `json:"line"`
+	VehicleType consts.VehicleType `json:"vehicleType"`
+	Realtime    bool               `json:"realtime,omitempty"`
+	Segments    []Pathsegment      `json:"segments,omitempty"`
 }
 
 type Service struct {
@@ -343,8 +345,8 @@ type Pathsegment struct {
 }
 
 type VehicleMapPath struct {
-	Track          []float64      `json:"track,omitempty"`
-	CoordinateType CoordinateType `json:"coordinateType"`
+	Track          []float64             `json:"track,omitempty"`
+	CoordinateType consts.CoordinateType `json:"coordinateType"`
 }
 
 type PartialStation struct {
@@ -354,16 +356,16 @@ type PartialStation struct {
 }
 
 type Elevator struct {
-	Lines        []string           `json:"lines,omitempty"`
-	Label        string             `json:"label,omitempty"`
-	CabinWidth   int32              `json:"cabinWidth,omitempty"`
-	CabinLength  int32              `json:"cabinLength,omitempty"`
-	DoorWidth    int32              `json:"doorWidth,omitempty"`
-	Description  string             `json:"description,omitempty"`
-	ElevatorType string             `json:"elevatorType,omitempty"`
-	ButtonType   ElevatorButtonType `json:"buttonType,omitempty"`
-	State        ElevatorStateType  `json:"state,omitempty"`
-	Cause        string             `json:"cause,omitempty"`
+	Lines        []string                  `json:"lines,omitempty"`
+	Label        string                    `json:"label,omitempty"`
+	CabinWidth   int32                     `json:"cabinWidth,omitempty"`
+	CabinLength  int32                     `json:"cabinLength,omitempty"`
+	DoorWidth    int32                     `json:"doorWidth,omitempty"`
+	Description  string                    `json:"description,omitempty"`
+	ElevatorType string                    `json:"elevatorType,omitempty"`
+	ButtonType   consts.ElevatorButtonType `json:"buttonType,omitempty"`
+	State        consts.ElevatorStateType  `json:"state,omitempty"`
+	Cause        string                    `json:"cause,omitempty"`
 }
 
 type Schedule struct {
@@ -402,19 +404,19 @@ type ScheduleElement struct {
 }
 
 type IndividualTrack struct {
-	Time   int32         `json:"time,omitempty"`
-	Length int32         `json:"length,omitempty"`
-	Type   TransportMode `json:"type"`
+	Time   int32                `json:"time,omitempty"`
+	Length int32                `json:"length,omitempty"`
+	Type   consts.TransportMode `json:"type"`
 }
 
 type IndividualRoute struct {
-	Start       SDName        `json:"start"`
-	Destination SDName        `json:"dest"`
-	Path        Path          `json:"path,omitzero"`
-	Paths       []Path        `json:"paths,omitempty"`
-	Length      int32         `json:"length,omitempty"`
-	Time        int32         `json:"time,omitempty"`
-	ServiceType TransportMode `json:"serviceType"`
+	Start       SDName               `json:"start"`
+	Destination SDName               `json:"dest"`
+	Path        Path                 `json:"path,omitzero"`
+	Paths       []Path               `json:"paths,omitempty"`
+	Length      int32                `json:"length,omitempty"`
+	Time        int32                `json:"time,omitempty"`
+	ServiceType consts.TransportMode `json:"serviceType"`
 }
 
 type Path struct {
@@ -444,12 +446,12 @@ type Announcement struct {
 }
 
 type Location struct {
-	Type           LocationType `json:"type,omitempty"`
-	Name           string       `json:"name,omitempty"`
-	Line           Service      `json:"line,omitzero"`
-	Begin          SDName       `json:"begin,omitzero"`
-	End            SDName       `json:"end,omitzero"`
-	BothDirections bool         `json:"bothDirections,omitempty"` //default: true
+	Type           consts.LocationType `json:"type,omitempty"`
+	Name           string              `json:"name,omitempty"`
+	Line           Service             `json:"line,omitzero"`
+	Begin          SDName              `json:"begin,omitzero"`
+	End            SDName              `json:"end,omitzero"`
+	BothDirections bool                `json:"bothDirections,omitempty"` //default: true
 }
 
 type Link struct {
