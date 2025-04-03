@@ -14,6 +14,7 @@ import (
 	"net/http/httputil"
 
 	"github.com/kristoffn/geofox-go/internal/consts"
+	"go.uber.org/zap"
 )
 
 const (
@@ -27,6 +28,7 @@ type API struct {
 	BaseURL     string
 	debug       bool
 	initialized bool
+	logger      *zap.Logger
 }
 
 type APIResponse struct {

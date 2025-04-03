@@ -1,13 +1,8 @@
 package geofox
 
-type Option func(*API) error
+import "go.uber.org/zap"
 
-func Debug() Option {
-	return func(a *API) error {
-		a.debug = true
-		return nil
-	}
-}
+type Option func(*API) error
 
 func (a *API) parseOptions(opts ...Option) error {
 	for _, option := range opts {
@@ -17,4 +12,20 @@ func (a *API) parseOptions(opts ...Option) error {
 		}
 	}
 	return nil
+}
+
+func Debug() Option {
+	return func(a *API) error {
+		a.debug = true
+		return nil
+	}
+}
+
+func WithLogger(logger *zap.Logger) Option {
+	return func(a *API) error {
+		if logger != nil {
+			a.logger = logger
+		}
+		return nil
+	}
 }

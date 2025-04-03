@@ -170,9 +170,9 @@ type PCRequest struct {
 type CNRequest struct {
 	BaseRequest
 	Name            types.SDName          `json:"theName"`
-	MaxList         int32                 `json:"maxList"`
-	MaxDistance     int32                 `json:"maxDistance"`
-	CoordinateType  consts.CoordinateType `json:"coordinateType"`
-	TariffDetails   bool                  `json:"tariffDetails"`
-	AllowTypeSwitch bool                  `json:"allowTypeSwitch"`
+	MaxList         int32                 `json:"maxList,omitempty"`
+	MaxDistance     int32                 `json:"maxDistance,omitempty"`
+	CoordinateType  consts.CoordinateType `json:"coordinateType,omitempty"`  //default: EPSG_4326
+	TariffDetails   bool                  `json:"tariffDetails,omitempty"`   //default: false
+	AllowTypeSwitch bool                  `json:"allowTypeSwitch,omitempty"` //default: true
 }
