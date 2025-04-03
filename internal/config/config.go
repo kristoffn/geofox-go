@@ -1,7 +1,10 @@
 package config
 
 type Config struct {
-	Debug bool
+	Debug    bool
+	Password string
+	Username string
+	AuthType string
 }
 
 func (cfg *Config) Apply(opts ...Option) error {

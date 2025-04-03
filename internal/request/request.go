@@ -9,9 +9,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
-	"net/http/httputil"
 )
 
 func createSHA1HmacSignature(input []byte, key []byte) string {
@@ -30,7 +28,7 @@ func getBodyBytes(req *http.Request) ([]byte, error) {
 	return body, nil
 }
 
-func sendRequest(ctx context.Context, method, uri string, params any) (error) {
+func sendRequest(ctx context.Context, method, uri string, params any) error {
 
 	var reqBody io.Reader
 	if params != nil {
@@ -42,7 +40,7 @@ func sendRequest(ctx context.Context, method, uri string, params any) (error) {
 			var jsonBody []byte
 			jsonBody, err := json.Marshal(params)
 			if err != nil {
-				return nil, fmt.Errorf("error marshalling params to JSON: %w", err)
+				return nil
 			}
 			reqBody = bytes.NewReader(jsonBody)
 		}
@@ -50,20 +48,20 @@ func sendRequest(ctx context.Context, method, uri string, params any) (error) {
 
 	resp, err := request(ctx, method, uri, reqBody)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	defer resp.Body.Close()
 
 	_, err = io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	retrun nil
+	return nil
 }
 
 func request(ctx context.Context, method, uri string, reqBody io.Reader) (*http.Response, error) {
 	client := &http.Client{}
-	req, err := http.NewRequestWithContext(ctx, method, a.BaseURL+uri, reqBody)
+	req, err := http.NewRequestWithContext(ctx, method, "/test", reqBody)
 	if err != nil {
 		return nil, err
 	}
@@ -74,9 +72,9 @@ func request(ctx context.Context, method, uri string, reqBody io.Reader) (*http.
 	}
 
 	req.Header.Add("Accept", "application/json")
-	req.Header.Add("geofox-auth-signature", createSHA1HmacSignature(bodyBytes, []byte(a.Password)))
-	req.Header.Add("geofox-auth-user", a.Username)
-	req.Header.Add("geofox-auth-type", a.AuthType)
+	req.Header.Add("geofox-auth-signature", createSHA1HmacSignature(bodyBytes, []byte("")))
+	req.Header.Add("geofox-auth-user", "")
+	req.Header.Add("geofox-auth-type", "")
 	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("Accept-Encoding", "gzip, deflate")
 	req.Header.Add("X-Platform", "web")

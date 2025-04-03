@@ -11,3 +11,17 @@ func Debug() config.Option {
 		return nil
 	})
 }
+
+func WithPassword(passwd string) config.Option {
+	return config.OptionFunc(func(c *config.Config) error {
+		c.Password = passwd
+		return nil
+	})
+}
+
+func WithUsername(username string) config.Option {
+	return config.OptionFunc(func(c *config.Config) error {
+		c.Username = username
+		return nil
+	})
+}
