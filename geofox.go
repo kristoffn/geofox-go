@@ -37,8 +37,8 @@ type APIResponse struct {
 	Headers    http.Header
 }
 
-func New(username, password string, opts ...Option) (*API, error) {
-	api, err := newClient(opts...)
+func New(username, password string) (*API, error) {
+	api, err := newClient()
 	if err != nil {
 		return nil, err
 	}
@@ -50,13 +50,10 @@ func New(username, password string, opts ...Option) (*API, error) {
 	return api, nil
 }
 
-func newClient(opts ...Option) (*API, error) {
+func newClient() (*API, error) {
 	api := &API{
 		AuthType: AuthTypeHmacSHA1,
 		debug:    false,
-	}
-	if err := api.parseOptions(opts...); err != nil {
-		return nil, fmt.Errorf("failed to parse options: %w", err)
 	}
 	return api, nil
 }

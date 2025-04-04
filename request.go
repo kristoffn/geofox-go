@@ -87,7 +87,7 @@ type GRRequest struct {
 	BaseRequest
 	Start                      types.SDName                `json:"start"`
 	Destination                types.SDName                `json:"dest"`
-	Via                        types.SDName                `json:"via,omitempty"`
+	Via                        types.SDName                `json:"via,omitzero"`
 	Time                       types.GTITime               `json:"time"`
 	TimeIsDeparture            bool                        `json:"timeIsDeparture,omitempty"`
 	WithPaths                  bool                        `json:"withPaths,omitempty"`
@@ -95,7 +95,7 @@ type GRRequest struct {
 	Penalties                  []types.Penalty             `json:"penalties,omitempty"`
 	TariffDetails              bool                        `json:"tariffDetails,omitempty"`   //default: false
 	ContinousSearch            bool                        `json:"continousSearch,omitempty"` //default: false
-	ContinousSearchByServiceId types.ContSearchByServiceId `json:"contSearchByServiceId,omitempty"`
+	ContinousSearchByServiceId types.ContSearchByServiceId `json:"contSearchByServiceId,omitzero"`
 	CoordinateType             consts.CoordinateType       `json:"coordinateType,omitempty"`  //default: EPSG_4326
 	SchedulesBefore            int32                       `json:"schedulesBefore,omitempty"` //default: 0
 	SchedulesAfter             int32                       `json:"schedulesAfter,omitempty"`  //default: 0
@@ -105,8 +105,8 @@ type GRRequest struct {
 	Realtime                   consts.RealTimeType         `json:"realtime,omitempty"`             //default: AUTO
 	IntermediateStops          bool                        `json:"intermediateStops,omitempty"`    //default: false
 	UseStationPosition         bool                        `json:"useStationPosition,omitempty"`   //default: true
-	ForcedStart                types.SDName                `json:"forcedStart,omitempty"`
-	ForcedDest                 types.SDName                `json:"forcedDest,omitempty"`
+	ForcedStart                types.SDName                `json:"forcedStart,omitzero"`
+	ForcedDest                 types.SDName                `json:"forcedDest,omitzero"`
 	ToStartBy                  consts.TransportMode        `json:"toStartBy,omitempty"`
 	ToDestinationBy            consts.TransportMode        `json:"toDestBy,omitempty"`
 	ReturnContentSearchData    bool                        `json:"returnContSearchData,omitempty"`
@@ -128,7 +128,7 @@ type IndividualRouteRequest struct {
 type AnnouncementRequest struct {
 	BaseRequest
 	Names                 []string        `json:"names,omitempty"`
-	TimeRange             types.TimeRange `json:"timeRange,omitempty"`
+	TimeRange             types.TimeRange `json:"timeRange,omitzero"`
 	Full                  bool            `json:"full,omitempty"` //default: false
 	FilterPlanned         string          `json:"filterPlanned,omitempty"`
 	ShowBroadcastRelevant bool            `json:"showBroadcastRelevant,omitempty"` //default: false
@@ -136,7 +136,7 @@ type AnnouncementRequest struct {
 
 type DLRequest struct {
 	BaseRequest
-	Station                   types.SDName                `json:"station,omitempty"`
+	Station                   types.SDName                `json:"station,omitzero"`
 	Stations                  []types.SDName              `json:"stations,omitempty"`
 	Time                      types.GTITime               `json:"time"`
 	MaxList                   int32                       `json:"maxList,omitempty"`
@@ -144,7 +144,7 @@ type DLRequest struct {
 	AllStationsInChangingNode bool                        `json:"allStationsInChangingNode,omitempty"` //default: true
 	UseRealTime               bool                        `json:"useRealtime,omitempty"`               //default: false
 	ReturnFilters             bool                        `json:"returnFilters,omitempty"`             //default: false
-	Filter                    types.DLFilterEntry         `json:"filter,omitempty"`
+	Filter                    types.DLFilterEntry         `json:"filter,omitzero"`
 	ServiceTypes              consts.TransportServiceType `json:"serviceTypes,omitempty"`
 	Departure                 bool                        `json:"departure,omitempty"` //default: true
 }
