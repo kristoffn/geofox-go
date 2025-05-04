@@ -24,64 +24,79 @@ var _ GeofoxError = (*ErrorGeneric)(nil)
 
 type GeofoxError interface {
 	Error() string
+	StatusCode() int
+	ReturnCode() GeofoxReturnCode
+	Message() string
+}
+
+type baseError struct {
+	statusCode int
+	returnCode GeofoxReturnCode
+	message    string
+}
+
+func (e *baseError) StatusCode() int {
+	return e.statusCode
+}
+
+func (e *baseError) ReturnCode() GeofoxReturnCode {
+	return e.returnCode
+}
+
+func (e *baseError) Message() string {
+	return e.message
 }
 
 type ErrorUnauthorized struct {
-	StatusCode int
-	ReturnCode GeofoxReturnCode
+	baseError
 }
 
 func (e *ErrorUnauthorized) Error() string {
-	return fmt.Sprintf("status code: %d, error type: %s",
-		e.StatusCode, e.ReturnCode)
+	return fmt.Sprintf("unauthorized: status code %d, return code %s, message: %s",
+		e.statusCode, e.returnCode, e.message)
 }
 
 type ErrorForbidden struct {
-	StatusCode int
-	ReturnCode GeofoxReturnCode
+	baseError
 }
 
 func (e *ErrorForbidden) Error() string {
-	return fmt.Sprintf("status code: %d, error type: %s",
-		e.StatusCode, e.ReturnCode)
+	return fmt.Sprintf("forbidden: status code %d, return code %s, message: %s",
+		e.statusCode, e.returnCode, e.message)
 }
 
 type ErrorNotFound struct {
-	StatusCode int
-	ReturnCode GeofoxReturnCode
+	baseError
 }
 
 func (e *ErrorNotFound) Error() string {
-	return fmt.Sprintf("status code: %d, error type: %s",
-		e.StatusCode, e.ReturnCode)
+	return fmt.Sprintf("not found: status code %d, return code %s, message: %s",
+		e.statusCode, e.returnCode, e.message)
 }
 
 type ErrorTooManyRequests struct {
-	StatusCode int
-	ReturnCode GeofoxReturnCode
+	baseError
 }
 
 func (e *ErrorTooManyRequests) Error() string {
-	return fmt.Sprintf("status code: %d, error type: %s",
-		e.StatusCode, e.ReturnCode)
+	return fmt.Sprintf("too many requests: status code %d, return code %s, message: %s",
+		e.statusCode, e.returnCode, e.message)
 }
 
 type ErrorInternalServerError struct {
-	StatusCode int
-	ReturnCode GeofoxReturnCode
+	baseError
 }
 
 func (e *ErrorInternalServerError) Error() string {
-	return fmt.Sprintf("status code: %d, error type: %s",
-		e.StatusCode, e.ReturnCode)
+	return fmt.Sprintf("internal server error: status code %d, return code %s, message: %s",
+		e.statusCode, e.returnCode, e.message)
 }
 
 type ErrorGeneric struct {
-	StatusCode int
-	ReturnCode GeofoxReturnCode
+	baseError
 }
 
 func (e *ErrorGeneric) Error() string {
-	return fmt.Sprintf("status code: %d, error type: %s",
-		e.StatusCode, e.ReturnCode)
+	return fmt.Sprintf("generic error: status code %d, return code %s, message: %s",
+		e.statusCode, e.returnCode, e.message)
 }
