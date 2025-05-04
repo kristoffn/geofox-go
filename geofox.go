@@ -9,7 +9,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"net/http/httputil"
 
@@ -45,7 +44,19 @@ func New(username, password string) (*API, error) {
 
 	api.Username = username
 	api.Password = password
-	api.BaseURL = fmt.Sprintf("%s://%s%s", consts.DefaultScheme, consts.DefaultHostname, consts.DefaultBasePath)
+	api.BaseURL = fmt.Sprintf(
+		"%s://%s%s",
+		consts.DefaultScheme,
+		consts.DefaultHostname,
+		consts.DefaultBasePath,
+	)
+
+	// Initialize logger
+	logger, err := zap.NewProduction()
+	if err != nil {
+		return nil, fmt.Errorf("failed to initialize logger: %w", err)
+	}
+	api.logger = logger
 
 	return api, nil
 }
@@ -75,7 +86,6 @@ func getBodyBytes(req *http.Request) ([]byte, error) {
 }
 
 func (a *API) sendRequest(ctx context.Context, method, uri string, params any) (*APIResponse, error) {
-
 	var reqBody io.Reader
 	if params != nil {
 		if r, ok := params.(io.Reader); ok {
@@ -98,27 +108,64 @@ func (a *API) sendRequest(ctx context.Context, method, uri string, params any) (
 	}
 	defer resp.Body.Close()
 
-	// TODO: Extend error handling for every possible responses
-	if resp.StatusCode >= http.StatusBadRequest {
-		switch resp.StatusCode {
-		case http.StatusUnauthorized:
-			return nil, &ErrorUnauthorized{StatusCode: resp.StatusCode}
-		case http.StatusForbidden:
-			return nil, &ErrorForbidden{StatusCode: resp.StatusCode}
-		case http.StatusNotFound:
-			return nil, &ErrorNotFound{StatusCode: resp.StatusCode}
-		case http.StatusTooManyRequests:
-			return nil, &ErrorTooManyRequests{StatusCode: resp.StatusCode}
-		case http.StatusInternalServerError:
-			return nil, &ErrorInternalServerError{StatusCode: resp.StatusCode}
-		default:
-			return nil, &ErrorGeneric{StatusCode: resp.StatusCode}
-		}
-	}
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error reading response body: %w", err)
 	}
+
+	// Log response details for debugging
+	if a.debug {
+		a.logger.Debug("API response",
+			zap.String("method", method),
+			zap.String("uri", uri),
+			zap.Int("status_code", resp.StatusCode),
+			zap.String("response_body", string(body)),
+		)
+	}
+
+	// Handle error responses
+	if resp.StatusCode >= http.StatusBadRequest {
+		errorMsg := string(body)
+		switch resp.StatusCode {
+		case http.StatusUnauthorized:
+			return nil, &ErrorUnauthorized{
+				StatusCode: resp.StatusCode,
+				ReturnCode: RCCommError,
+				Message:    errorMsg,
+			}
+		case http.StatusForbidden:
+			return nil, &ErrorForbidden{
+				StatusCode: resp.StatusCode,
+				ReturnCode: RCCommError,
+				Message:    errorMsg,
+			}
+		case http.StatusNotFound:
+			return nil, &ErrorNotFound{
+				StatusCode: resp.StatusCode,
+				ReturnCode: RCCommError,
+				Message:    errorMsg,
+			}
+		case http.StatusTooManyRequests:
+			return nil, &ErrorTooManyRequests{
+				StatusCode: resp.StatusCode,
+				ReturnCode: RCCommError,
+				Message:    errorMsg,
+			}
+		case http.StatusInternalServerError:
+			return nil, &ErrorInternalServerError{
+				StatusCode: resp.StatusCode,
+				ReturnCode: RCCommError,
+				Message:    errorMsg,
+			}
+		default:
+			return nil, &ErrorGeneric{
+				StatusCode: resp.StatusCode,
+				ReturnCode: RCCommError,
+				Message:    errorMsg,
+			}
+		}
+	}
+
 	return &APIResponse{
 		Body:       body,
 		StatusCode: resp.StatusCode,
@@ -130,7 +177,7 @@ func (a *API) request(ctx context.Context, method, uri string, reqBody io.Reader
 	client := &http.Client{}
 	req, err := http.NewRequestWithContext(ctx, method, a.BaseURL+uri, reqBody)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error creating request: %w", err)
 	}
 
 	bodyBytes, err := getBodyBytes(req)
@@ -149,22 +196,40 @@ func (a *API) request(ctx context.Context, method, uri string, reqBody io.Reader
 	if a.debug {
 		dump, err := httputil.DumpRequestOut(req, true)
 		if err != nil {
-			return nil, err
+			a.logger.Error("Failed to dump request",
+				zap.Error(err),
+				zap.String("method", method),
+				zap.String("uri", uri),
+			)
+		} else {
+			a.logger.Debug("Request dump",
+				zap.String("method", method),
+				zap.String("uri", uri),
+				zap.String("dump", string(dump)),
+			)
 		}
-		log.Println(string(dump))
 	}
 
 	resp, err := client.Do(req)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("error making request: %w", err)
 	}
 
 	if a.debug {
 		dump, err := httputil.DumpResponse(resp, true)
 		if err != nil {
-			return nil, err
+			a.logger.Error("Failed to dump response",
+				zap.Error(err),
+				zap.String("method", method),
+				zap.String("uri", uri),
+			)
+		} else {
+			a.logger.Debug("Response dump",
+				zap.String("method", method),
+				zap.String("uri", uri),
+				zap.String("dump", string(dump)),
+			)
 		}
-		log.Println(string(dump))
 	}
 
 	return resp, nil
