@@ -13,3 +13,7 @@ require (
 	go.uber.org/multierr v1.10.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
+
+retract (
+	[v0.0.1-alpha, v0.0.1, v0.0.2-alpha, v0.0.2, v0.0.3-alpha, v0.0.3, v0.0.4-alpha, v0.0.4]
+)
